@@ -1,0 +1,17 @@
+# TC001 Thermal Viewer Dependencies
+
+# Core Data Processing
+numpy
+opencv-python
+
+# Image Handling & GUI
+Pillow
+sv-ttk
+
+# macOS AVFoundation Bridges (PyObjC)
+pyobjc-core
+pyobjc-framework-AVFoundation
+pyobjc-framework-CoreMedia
+pyobjc-framework-Quartz
+pyobjc-framework-libdispatch
+pyobjc-framework-Cocoa
