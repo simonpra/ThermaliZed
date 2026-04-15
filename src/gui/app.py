@@ -1,9 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-try:
-    import sv_ttk
-except ImportError:
-    sv_ttk = None
 from src.gui.components import Frame, PanedWindow, ScrollableFrame
 from src.core.app_context import AppContext
 
