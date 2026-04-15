@@ -1,14 +1,16 @@
 # ThermaliZed
 
-**ThermaliZed** is a Python-based extensible thermal camera viewer designed for seamless live rendering, dynamic GUI controls, and advanced raw thermal data manipulation. Created by **iZed.ch**, this application provides researchers, engineers, and hobbyists with a powerful, desktop-class interface to interact with affordable thermal imaging hardware.
+**ThermaliZed** is a Python-based extensible thermal camera viewer designed for seamless live rendering, dynamic GUI controls, and advanced raw thermal data manipulation. This application provides researchers, engineers, and hobbyists with a powerful, desktop-class interface to interact with affordable thermal imaging hardware.
 
 ![Python Version](https://img.shields.io/badge/python-3.11+-blue.svg)
 
-## Requierements
+## Requirements
 
-- **OsX with Apple Silicon** (for AvFoundation to work)
-- **Python 3.11+** - ideally 3.14 (for ttk v.9+ SVG support)
-- **Tkinter 9+** (if older, SVG icon will display _[icon]_, but application will work)
+- **macOS on Apple Silicon (M1+)**: Required for high-performance zero-copy memory buffers via CoreVideo and AVFoundation.
+- **Python 3.11+ (Native ARM64 build)**: Do not use an x86 version under Rosetta 2, or video frame extraction performance will severely degrade. Ideally Python 3.14+ for `ttk` v9+ SVG support.
+- **Tkinter 9+**: If older, SVG icons will fallback to displaying `[icon]`, but the application will still function perfectly.
+- **Xcode Command Line Tools**: Only required if a pre-compiled wheel for PyObjC is not available for your specific Python/macOS environment. It allows `pip` to build the C-extensions from source. Install via terminal: `xcode-select --install`
+- **Camera Permissions**: macOS will terminate the script unless your Terminal or IDE is granted Camera access in `System Settings > Privacy & Security > Camera`.
 
 ## Supported Brands
 
