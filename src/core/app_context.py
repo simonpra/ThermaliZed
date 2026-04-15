@@ -88,7 +88,14 @@ class AppContext:
         Automatically discovers and loads third-party plugins from the `plugins/` 
         directory in the project root. Fallbacks safely if no plugins are found.
         """
-        plugins_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'plugins'))
+        if getattr(sys, 'frozen', False):
+            # Running in a PyInstaller bundle
+            base_dir = sys._MEIPASS
+        else:
+            # Running in a normal Python environment
+            base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+            
+        plugins_dir = os.path.join(base_dir, 'plugins')
         if not os.path.exists(plugins_dir):
             os.makedirs(plugins_dir)
             
@@ -98,14 +105,17 @@ class AppContext:
         # Force Python to recognize it as a package if not exists
         init_file = os.path.join(plugins_dir, '__init__.py')
         if not os.path.exists(init_file):
-            with open(init_file, 'w') as f:
-                f.write('')
+            try:
+                with open(init_file, 'w') as f:
+                    f.write('')
+            except OSError:
+                pass # Ignore if running in a read-only PyInstaller MEIPASS bundle
                 
         try:
             import plugins
             self._load_from_package(plugins)
         except ImportError as e:
-            self.event_bus.publish('LOG_MESSAGE', f"Failed to load external plugins directory: {e}")
+            print(f"Failed to load external plugins directory: {e}")
 
     def _load_from_package(self, package):
         """
@@ -125,6 +135,6 @@ class AppContext:
                         plugin_instance = module.PluginClass()
                         plugin_instance.on_load(self)
                         self.plugins.append(plugin_instance)
-                        self.event_bus.publish('LOG_MESSAGE', f"Loaded Plugin: {module_name}")
+                        print(f"Loaded Plugin: {module_name}")
                 except Exception as e:
-                    self.event_bus.publish('LOG_MESSAGE', f"Failed to load plugin {module_name}: {e}")
+                    print(f"Failed to load plugin {module_name}: {e}")

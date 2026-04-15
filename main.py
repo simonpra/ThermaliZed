@@ -2,7 +2,7 @@ import argparse
 from src.gui.app import ThermalApp
 
 def main():
-    parser = argparse.ArgumentParser(description='TC001 Thermal Camera Viewer - Tkinter Edition')
+    parser = argparse.ArgumentParser(description='ThermaliZed - Thermal Camera Viewer')
     parser.add_argument('--debug', action='store_true', help='Enable debug output')
     args = parser.parse_args()
     
