@@ -28,7 +28,7 @@ ThermaliZed is built to communicate with Topdon TC001, but it probably supports 
 - **Extensible Plugin Engine**: An event-driven architecture that allows developers to easily inject custom image filters, UI components, and data exports.
 - **Dynamic Visuals**: CV2 color palettes, temperature bound leveling, contrast and gamma.
 
-### Exemples
+## Exemples
 Temperature steps with live view
 
 https://github.com/user-attachments/assets/e9fc57ef-a1ed-415e-96f2-c2db8a09bafc
