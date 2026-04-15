@@ -12,6 +12,16 @@
 - **Xcode Command Line Tools**: Only required if a pre-compiled wheel for PyObjC is not available for your specific Python/macOS environment. It allows `pip` to build the C-extensions from source. Install via terminal: `xcode-select --install`
 - **Camera Permissions**: macOS will terminate the script unless your Terminal or IDE is granted Camera access in `System Settings > Privacy & Security > Camera`.
 
+## Standalone Bundle
+
+![thermaliZd logo](thermalized.png)
+
+You can download the latest pre-compiled application bundle directly from the `dist` folder.
+
+The app is packaged into a standalone executable using PyInstaller and the provided `ThermaliZed.spec` configuration file.
+
+> **Note:** This software is provided _"as is"_ without any guarantees of compatibility for your specific hardware or operating system configuration. It has been primarily developed and tested on a MacBook Air (M3) running macOS 15.7.
+
 ## Supported Brands
 
 ThermaliZed is built to communicate with Topdon TC001, but it probably supports :
