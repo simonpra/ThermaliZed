@@ -65,7 +65,7 @@ class GradientOverlay(CanvasOverlay):
                 0, y,
                 text=text_val,
                 anchor='w',
-                font=("Arial", 11),
+                font=("", 11),
             )
 
     def _on_colormap_changed(self, cv2_colormap: int) -> None:

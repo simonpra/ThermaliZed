@@ -25,10 +25,11 @@ class HudOverlay(CanvasOverlay):
         ('min_c',         'Est °C',      lambda v, d: f"{v:.1f} – {d.get('max_c', float('nan')):.1f}"
                                               if not np.isnan(v) else None),
         ('colormap_name', 'Map',         lambda v: v),
-        ('scale',         'Scale',       lambda v: f"{v}×"),
         ('blur',          'Blur',        lambda v: str(v)),
         ('alpha',         'Contrast',    lambda v: f"{v:.1f}"),
+        ('gamma',         'Texture',     lambda v: f"{v:.1f}"),
     ]
+
 
     def __init__(self, **kwargs):
         super().__init__(x=10, y=10, anchor='nw', **kwargs)
@@ -41,7 +42,7 @@ class HudOverlay(CanvasOverlay):
             lbl = ttk.Label(
                 frame,
                 text=f"{prefix}: —",
-                font=("Helvetica", 11, "bold"),
+                font=("", 11, "normal"),
                 foreground="white",
                 background="#1a1a1a",
                 anchor="w",
