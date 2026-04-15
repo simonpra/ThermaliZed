@@ -87,26 +87,134 @@ class SnapshotFrame(ttk.LabelFrame):
         filepath = filedialog.askopenfilename(
             initialdir=initial_dir,
             title="Load Snapshot",
-            filetypes=(("Numpy Zipped Files", "*.npz"), ("All Files", "*.*"))
+            filetypes=(
+                ("All Supported Files", "*.npz *.csv *.xlsx *.xls"),
+                ("Numpy Zipped Files", "*.npz"),
+                ("CSV Files", "*.csv"),
+                ("Excel Files", "*.xlsx *.xls"),
+                ("All Files", "*.*")
+            )
         )
 
-        if filepath:
-            try:
-                data = np.load(filepath)
-                frozen_data = {
-                    'frame': data['frame'],
-                    'width': int(data['width']),
-                    'height': int(data['height']),
-                    'stride': int(data['stride']),
-                    'timestamp': time.time()
-                }
-                
-                self.context.state['frozen_frame_data'] = frozen_data
-                self.btn_resume.config(state=tk.NORMAL)
-                self.context.event_bus.publish('LOG_MESSAGE', f"Loaded snapshot: {os.path.basename(filepath)}")
-                
-            except Exception as e:
-                self.context.event_bus.publish('LOG_MESSAGE', f"Failed to load snapshot: {e}")
+        if not filepath:
+            return
+
+        ext = os.path.splitext(filepath)[1].lower()
+        if ext == '.npz':
+            self._load_npz(filepath)
+        elif ext == '.csv':
+            self._load_csv(filepath)
+        elif ext in ['.xlsx', '.xls']:
+            self._load_excel(filepath)
+        else:
+            self.context.event_bus.publish('LOG_MESSAGE', f"Unsupported file type: {ext}")
+
+    def _load_npz(self, filepath):
+        try:
+            data = np.load(filepath)
+            frozen_data = {
+                'frame': data['frame'],
+                'width': int(data['width']),
+                'height': int(data['height']),
+                'stride': int(data['stride']),
+                'timestamp': time.time()
+            }
+            
+            self.context.state['frozen_frame_data'] = frozen_data
+            self.btn_resume.config(state=tk.NORMAL)
+            self.context.event_bus.publish('LOG_MESSAGE', f"Loaded snapshot: {os.path.basename(filepath)}")
+            
+        except Exception as e:
+            self.context.event_bus.publish('LOG_MESSAGE', f"Failed to load snapshot: {e}")
+
+    def _clean_and_convert_data(self, df):
+        def clean_and_convert(value):
+            if isinstance(value, str):
+                try:
+                    return float(value.replace('°C', '').strip())
+                except ValueError:
+                    return np.nan
+            elif isinstance(value, (int, float)):
+                return float(value)
+            else:
+                return np.nan
+
+        if hasattr(df, 'map'):
+            data = df.map(clean_and_convert).to_numpy()
+        else:
+            data = df.applymap(clean_and_convert).to_numpy()
+
+        min_val = np.nanmin(data)
+        if np.isnan(min_val):
+            min_val = 10.0
+        data = np.nan_to_num(data, nan=min_val)
+        return data
+
+    def _create_raw_buffer(self, temperature_celsius_2d):
+        thermal_h, thermal_w = temperature_celsius_2d.shape
+        
+        raw_16bit = (temperature_celsius_2d + 273.15) * 64.0
+        raw_16bit = np.ascontiguousarray(np.round(raw_16bit).astype('<u2'))
+        
+        height = thermal_h * 2
+        width = thermal_w
+        stride = width * 2
+        
+        frame_packed = np.zeros((height, width, 2), dtype=np.uint8)
+        thdata = raw_16bit.view(np.uint8).reshape(thermal_h, thermal_w, 2)
+        frame_packed[thermal_h:, :, :] = thdata
+        
+        raw_flat_buffer = frame_packed.flatten()
+        
+        return {
+            'frame': raw_flat_buffer,
+            'width': width,
+            'height': height,
+            'stride': stride,
+            'timestamp': time.time()
+        }
+
+    def _load_csv(self, filepath):
+        try:
+            import pandas as pd
+        except ImportError:
+            self.context.event_bus.publish('LOG_MESSAGE', "Error: pandas is required to load CSV files.")
+            return
+
+        try:
+            df = pd.read_csv(filepath, header=None)
+            data = self._clean_and_convert_data(df)
+            frozen_data = self._create_raw_buffer(data)
+            
+            self.context.state['frozen_frame_data'] = frozen_data
+            self.btn_resume.config(state=tk.NORMAL)
+            self.context.event_bus.publish('LOG_MESSAGE', f"Loaded CSV snapshot: {os.path.basename(filepath)}")
+        except Exception as e:
+            self.context.event_bus.publish('LOG_MESSAGE', f"Failed to load CSV: {e}")
+
+    def _load_excel(self, filepath):
+        try:
+            import pandas as pd
+        except ImportError:
+            self.context.event_bus.publish('LOG_MESSAGE', "Error: pandas and openpyxl are required to load Excel files.")
+            return
+
+        try:
+            import openpyxl
+        except ImportError:
+             self.context.event_bus.publish('LOG_MESSAGE', "Error: openpyxl is required to load .xlsx files.")
+             return
+
+        try:
+            df = pd.read_excel(filepath, header=None)
+            data = self._clean_and_convert_data(df)
+            frozen_data = self._create_raw_buffer(data)
+            
+            self.context.state['frozen_frame_data'] = frozen_data
+            self.btn_resume.config(state=tk.NORMAL)
+            self.context.event_bus.publish('LOG_MESSAGE', f"Loaded Excel snapshot: {os.path.basename(filepath)}")
+        except Exception as e:
+            self.context.event_bus.publish('LOG_MESSAGE', f"Failed to load Excel: {e}")
 
     def _resume_live(self):
         self.context.state['frozen_frame_data'] = None

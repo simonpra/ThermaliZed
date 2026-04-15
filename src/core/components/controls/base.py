@@ -43,19 +43,8 @@ class BaseControlFrame(ttk.Frame):
         ).grid(row=row, column=0, sticky=tk.W, pady=0, padx=0)
         
         # The scale + spinbox composite
-        slider = LabelSlider(self, variable=variable, from_=from_, to=to, resolution=resolution)
+        slider = LabelSlider(self, variable=variable, from_=from_, to=to, resolution=resolution, command=command)
         slider.grid(row=row+1, column=0, sticky=tk.EW, pady=0, padx=0)
         
-        if command:
-            slider.scale.configure(command=command)
-            # Rebind spinbox to also trigger the command on explicit interaction
-            def _spin_cmd(_event=None):
-                slider._sync_var()
-                command(variable.get())
-                
-            slider.spinbox.configure(command=_spin_cmd)
-            slider.spinbox.bind("<Return>", _spin_cmd)
-            slider.spinbox.bind("<FocusOut>", _spin_cmd)
-            
         return slider
 
