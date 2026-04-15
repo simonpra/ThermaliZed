@@ -28,6 +28,24 @@ ThermaliZed is built to communicate with Topdon TC001, but it probably supports 
 - **Extensible Plugin Engine**: An event-driven architecture that allows developers to easily inject custom image filters, UI components, and data exports.
 - **Dynamic Visuals**: CV2 color palettes, temperature bound leveling, contrast and gamma.
 
+### Exemples
+Temperature steps with live view
+
+https://github.com/user-attachments/assets/e9fc57ef-a1ed-415e-96f2-c2db8a09bafc
+
+Manual temperature leveling with Excel file loaded
+
+https://github.com/user-attachments/assets/f61b616a-568d-4183-b353-2b1a8ca1b7d6
+
+Temperature/Gradient steps on loaded file
+
+https://github.com/user-attachments/assets/304a9ccd-7da5-4aaa-b65e-ed2e02f7c480
+
+Texture & Contrast on loaded file
+
+https://github.com/user-attachments/assets/dde45412-b15c-42bd-ad21-ff663183d3a0
+
+
 ## Quick Start
 
 Ensure you have Python 3.11+ installed. The `ttk` version 9+ is required for the application's SVG compatibility, but not mandatory.
