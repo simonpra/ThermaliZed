@@ -9,7 +9,7 @@ class ThermalApp(tk.Tk):
     def __init__(self):
         super().__init__()
         
-        self.title("TC001 Thermal Camera Viewer")
+        self.title("ThermaliZed - Thermal Camera Viewer")
         self.geometry("1000x750")
         self.minsize(800, 600)
         

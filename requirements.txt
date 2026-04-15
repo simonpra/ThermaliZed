@@ -6,7 +6,6 @@ opencv-python
 
 # Image Handling & GUI
 Pillow
-sv-ttk
 
 # macOS AVFoundation Bridges (PyObjC)
 pyobjc-core

@@ -12,3 +12,6 @@ venv.bak/
 .vscode/
 .idea/
 *.log
+build/
+dist/ThermaliZed/
+dist/ThermaliZed.app/
