@@ -20,6 +20,7 @@ ThermaliZed is built to communicate with Topdon TC001, but it probably supports 
 - **InfiRay**: P2 Pro
 - **InfiRay**: T2 Series (T2L, T2S Plus, T2 Pro)
 - _Other generic UVC thermal cameras utilizing the InfiRay Tiny1-C core or similar chipsets._
+- **Excel or CSV files**: Can load thermal data from Excel or CSV files (no Header) into a 16bits array picture.
 
 ## Key Features
 
@@ -29,6 +30,7 @@ ThermaliZed is built to communicate with Topdon TC001, but it probably supports 
 - **Dynamic Visuals**: CV2 color palettes, temperature bound leveling, contrast and gamma.
 
 ## Exemples
+
 Temperature steps with live view
 
 https://github.com/user-attachments/assets/e9fc57ef-a1ed-415e-96f2-c2db8a09bafc
@@ -44,7 +46,6 @@ https://github.com/user-attachments/assets/304a9ccd-7da5-4aaa-b65e-ed2e02f7c480
 Texture & Contrast on loaded file
 
 https://github.com/user-attachments/assets/dde45412-b15c-42bd-ad21-ff663183d3a0
-
 
 ## Quick Start
 
