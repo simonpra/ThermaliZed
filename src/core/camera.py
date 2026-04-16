@@ -8,7 +8,7 @@ from Quartz import CoreVideo as CV
 
 from src.core.delegate import FrameDelegate
 
-class ThermalCamera:
+class ThermalUSBDevices():
     """
     Manages the AVFoundation capture session and retrieves frames from the thermal camera hardware.
     
@@ -38,18 +38,45 @@ class ThermalCamera:
             list[str]: A list of localized logical device names.
         """
         try:
+            filtered_devices = []
             devices = AVF.AVCaptureDevice.devicesWithMediaType_(AVF.AVMediaTypeVideo)
             for d in devices :
+                if not ThermalUSBDevices.filter_devices(d):
+                    continue
+                filtered_devices.append(d.localizedName())
                 dId = d.uniqueID()
                 dModelId = d.modelID()
                 dName = d.localizedName()
                 dManufacturer = d.manufacturer()
-                print(f"Device ID: {dId}, Model ID: {dModelId}, Name: {dName}, Manufacturer: {dManufacturer}")
+                dFormat = d.formats()
+                print(f"Device ID: {dId}, Model ID: {dModelId}, Name: {dName}, Manufacturer: {dManufacturer}, Format: {dFormat}")
                 
-            return [str(d.localizedName()) for d in devices]
+            return filtered_devices
         except Exception as e:
             print(f"Error getting device names: {e}")
             return []
+    
+    @staticmethod
+    def filter_devices(device: AVF.AVCaptureDevice):
+        """
+        Filter out devices that are simple webcam.
+        Using the resolution ratio to filter out devices.
+        TC001 resolution ratio is 1.5 (384/256), wich is 2 384x128 standard 16/9 supperposed,
+        to be "merged" togheter to create the final 16bits image.
+        Webcam resolution ratio is 16/9 (1.777...) or 4/3 (1.333...).
+        
+        Args:
+            device (AVF.AVCaptureDevice): The device to filter.
+            
+        Returns:
+            boolean: False if the device is a webcam, True otherwise.
+        """
+        for fmt in device.formats():
+            desc = fmt.formatDescription()
+            dims = CM.CMVideoFormatDescriptionGetDimensions(desc)
+            if dims.height / dims.width == 1.5:
+                return True  # TC001 signature found
+        return False
 
     def start(self, device_index):
         """
