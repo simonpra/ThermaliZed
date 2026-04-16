@@ -41,7 +41,7 @@ class ControlDeviceFrame(BaseControlFrame):
                 if camera:
                     camera.start(idx)
                     self.status_var.set("Connected")
-                    self.connect_btn.config(state="disabled")
+                    self.connect_btn.config(text="Disconnect", command=self._on_disconnect)
                     self.device_combo.config(state="disabled")
                     self.context.event_bus.publish('LOG_MESSAGE', f"Connected to camera index {idx}")
                 else:
@@ -49,3 +49,16 @@ class ControlDeviceFrame(BaseControlFrame):
             except Exception as e:
                 self.status_var.set(f"Error: {e}")
                 self.context.event_bus.publish('LOG_MESSAGE', f"Error connecting: {e}")
+
+    def _on_disconnect(self):
+        try:
+            camera = self.context.get_service('camera')
+            if camera:
+                camera.stop()
+                self.status_var.set("Not Connected")
+                self.connect_btn.config(text="Connect", command=self._on_connect)
+                self.device_combo.config(state="normal")
+                self.context.event_bus.publish('LOG_MESSAGE', "Camera disconnected")
+        except Exception as e:
+            self.status_var.set(f"Error: {e}")
+            self.context.event_bus.publish('LOG_MESSAGE', f"Error disconnecting: {e}")
