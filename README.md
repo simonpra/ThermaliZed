@@ -46,41 +46,13 @@ ThermaliZed is built to communicate with Topdon TC001, but it probably supports 
 And can as well load :
 - **Excel or CSV files**: thermal data from Excel or CSV files (no Header) into a 16bits array picture.
 
-## Requirements
+## Development resouces
 
-- **macOS on Apple Silicon (M1+)**: Required for high-performance zero-copy memory buffers via CoreVideo and AVFoundation.
-- **Python 3.11+ (Native ARM64 build)**: Do not use an x86 version under Rosetta 2, or video frame extraction performance will severely degrade. Ideally Python 3.14+ for `ttk` v9+ SVG support.
-- **Tkinter 9+**: If older, SVG icons will fallback to displaying `[icon]`, but the application will still function perfectly.
-- **Xcode Command Line Tools**: Only required if a pre-compiled wheel for PyObjC is not available for your specific Python/macOS environment. It allows `pip` to build the C-extensions from source. Install via terminal: `xcode-select --install`
-- **Camera Permissions**: macOS will terminate the script unless your Terminal or IDE is granted Camera access in `System Settings > Privacy & Security > Camera`.
-
-## Quick Start
-
-Ensure you have Python 3.11+ installed. The `ttk` version 9+ is required for the application's SVG compatibility, but not mandatory.
-
-1. Clone this repository.
-
-   1.1 ideally use a virtual environment
-
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate
-   pip install --upgrade pip
-   ```
-
-2. Install the required dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Connect your thermal camera via USB. (optional, you can also load [raw file](thermal_pictures/tc001_snapshot.npz) )
-4. Run the application:
-   ```bash
-   python main.py
-   ```
+Installation process and all development resources live in [dev/README.md](dev/README.md)
 
 ## Standalone Bundle
 
-![thermaliZd logo](thermalized.png)
+![thermaliZed logo](thermalized.png)
 
 You can download the latest pre-compiled application bundle directly from the `dist` folder.
 
@@ -105,11 +77,3 @@ https://github.com/user-attachments/assets/304a9ccd-7da5-4aaa-b65e-ed2e02f7c480
 Texture & Contrast on loaded file
 
 https://github.com/user-attachments/assets/dde45412-b15c-42bd-ad21-ff663183d3a0
-
-## Developer Documentation
-
-[PLUGIN.md](PLUGIN.md) will give you a good overview of the plugin and modular system.
-
-[image_enhancement PLUGIN](plugins/image_enhancement/__init__.py) as a full exemple of a data-stream-manipulation plugin.
-
-[SKILLS.md](SKILLS.md) can be used to ask AI agents to directly build your desired plugin.
