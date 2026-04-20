@@ -4,7 +4,7 @@ import sys
 import os
 
 from src.core.events import EventBus
-from src.core.camera import ThermalUSBDevices
+from src.core.device_manager import ThermalDeviceManager
 from src.utils.constants import DEFAULT_PARAMS
 
 class AppContext:
@@ -31,7 +31,7 @@ class AppContext:
         self.services = {}
         self.plugins = []
         
-        self.camera = ThermalUSBDevices()
+        self.camera = ThermalDeviceManager()
         self.state['devices'] = self.camera.get_device_names()
         self.register_service('camera', self.camera)
         

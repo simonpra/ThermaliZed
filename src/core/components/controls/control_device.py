@@ -18,20 +18,50 @@ class ControlDeviceFrame(BaseControlFrame):
             columnspan=2, sticky=tk.W
         ); row += 1
         self.device_var = tk.StringVar()
-        devices = self.context.state.get('devices', [])
+        self.device_combo = Combobox(self, textvariable=self.device_var, state="readonly")
+        self.device_combo.grid(row=row, column=0, sticky=tk.EW, pady=0)
         
-        if devices:
-            self.device_var.set(devices[0])
-            self.device_combo = Combobox(self, textvariable=self.device_var, values=devices)
-            self.device_combo.grid(row=row, column=0, sticky=tk.EW, pady=0)
-            
-            self.connect_btn = Button(self, text="Connect", command=self._on_connect)
-            self.connect_btn.grid(row=row, column=1, sticky=tk.EW, pady=0); row += 1
-        else:
-            Label(self, text="No devices found", foreground="red").grid(row=row, column=0, columnspan=2, sticky=tk.W, pady=(0, 15)); row += 1
-            
+        self.refresh_btn = Button(self, text="↻", width=3, command=self._on_refresh)
+        self.refresh_btn.grid(row=row, column=1, sticky=tk.EW, pady=0); row += 1
+        
+        self.connect_btn = Button(self, text="Connect", command=self._on_connect)
+        self.connect_btn.grid(row=row, column=0, columnspan=2, sticky=tk.EW, pady=(5, 10)); row += 1
+        
+        # Initial scan for devices
+        self._on_refresh()
+        
         # Add to parent
         self.parent.add_control_frame(self)
+        
+    def _on_refresh(self):
+        try:
+            camera = self.context.get_service('camera')
+            if camera:
+                devices = camera.get_device_names()
+                self.context.state['devices'] = devices
+                if devices:
+                    # Provide string names to combobox (AVF devices use localizedName normally, but backend just returns the objects.
+                    
+                    # Backend Macos returns objects. Linux/Windows OpenCV returns strings.
+                    # Normalize them to strings.
+                    display_names = []
+                    for d in devices:
+                        if hasattr(d, 'localizedName'):
+                            display_names.append(str(d.localizedName()))
+                        else:
+                            display_names.append(str(d))
+                            
+                    self.device_combo.config(values=display_names)
+                    self.device_var.set(display_names[0])
+                    self.connect_btn.config(state="normal")
+                    self.context.event_bus.publish('LOG_MESSAGE', f"Found {len(display_names)} device(s)")
+                else:
+                    self.device_combo.config(values=["No devices found"])
+                    self.device_var.set("No devices found")
+                    self.connect_btn.config(state="disabled")
+                    self.context.event_bus.publish('LOG_MESSAGE', f"No Device Found")
+        except Exception as e:
+            self.context.event_bus.publish('LOG_MESSAGE', f"Error refreshing devices: {e}")
             
     def _on_connect(self):
         idx = self.device_combo.current()

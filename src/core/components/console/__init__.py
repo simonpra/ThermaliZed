@@ -31,7 +31,7 @@ class ConsoleFrame(tk.Frame):
             rotation=0, # point up
             command=self._toggle
         )
-        self.toggle_btn.grid(row=0, column=0, sticky=tk.W, padx=0, pady=0)
+        self.toggle_btn.grid(row=0, column=0, sticky=tk.N, padx=0, pady=0)
         
         # Minimized Label
         self.status_var = tk.StringVar(value="Ready.")

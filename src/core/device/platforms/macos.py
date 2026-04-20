@@ -6,14 +6,12 @@ import AVFoundation as AVF
 import CoreMedia as CM
 from Quartz import CoreVideo as CV
 
-from src.core.delegate import FrameDelegate
+from src.core.device.platforms.macos_delegate import FrameDelegate
+from src.core.device.base import BaseDeviceBackend
 
-class ThermalUSBDevices():
+class MacOSDeviceBackend(BaseDeviceBackend):
     """
-    Manages the AVFoundation capture session and retrieves frames from the thermal camera hardware.
-    
-    This acts as the bridge between the CoreMedia/AVFoundation driver layers
-    and the application's internal frame state.
+    Manages the AVFoundation capture session and retrieves frames from the thermal camera hardware on macOS.
     """
     
     def __init__(self):
@@ -28,22 +26,19 @@ class ThermalUSBDevices():
         }
         self.capture_thread = None
         self.session_active = False
+        self.devices = []
 
-    @staticmethod
-    def get_device_names():
+    def get_device_names(self) -> list[AVF.AVCaptureDevice]:
         """
         Request a list of available video devices from AVFoundation.
-        
-        Returns:
-            list[str]: A list of localized logical device names.
         """
         try:
-            filtered_devices = []
+            self.devices = []
             devices = AVF.AVCaptureDevice.devicesWithMediaType_(AVF.AVMediaTypeVideo)
             for d in devices :
-                if not ThermalUSBDevices.filter_devices(d):
+                if not MacOSDeviceBackend.filter_devices(d):
                     continue
-                filtered_devices.append(d.localizedName())
+                self.devices.append(d)
                 dId = d.uniqueID()
                 dModelId = d.modelID()
                 dName = d.localizedName()
@@ -51,7 +46,7 @@ class ThermalUSBDevices():
                 dFormat = d.formats()
                 print(f"Device ID: {dId}, Model ID: {dModelId}, Name: {dName}, Manufacturer: {dManufacturer}, Format: {dFormat}")
                 
-            return filtered_devices
+            return self.devices
         except Exception as e:
             print(f"Error getting device names: {e}")
             return []
@@ -64,12 +59,6 @@ class ThermalUSBDevices():
         TC001 resolution ratio is 1.5 (384/256), wich is 2 384x128 standard 16/9 supperposed,
         to be "merged" togheter to create the final 16bits image.
         Webcam resolution ratio is 16/9 (1.777...) or 4/3 (1.333...).
-        
-        Args:
-            device (AVF.AVCaptureDevice): The device to filter.
-            
-        Returns:
-            boolean: False if the device is a webcam, True otherwise.
         """
         for fmt in device.formats():
             desc = fmt.formatDescription()
@@ -79,12 +68,6 @@ class ThermalUSBDevices():
         return False
 
     def start(self, device_index):
-        """
-        Start the AVFoundation capture pipeline in a background daemon thread.
-        
-        Args:
-            device_index (int): The index of the selected device from `get_device_names`.
-        """
         if not self.session_active:
             self.session_active = True
             self.capture_thread = threading.Thread(
@@ -95,33 +78,22 @@ class ThermalUSBDevices():
             self.capture_thread.start()
 
     def stop(self):
-        """
-        Gracefully stop the capture session and join the background thread safely.
-        """
         self.session_active = False
         if self.capture_thread:
             self.capture_thread.join(timeout=2.0)
 
     def _capture_loop(self, device_index):
-        """
-        Internal worker thread loop that establishes the AVFoundation capture session
-        and binds it to the FrameDelegate.
-        
-        Args:
-            device_index (int): The device index to construct the capture session for.
-        """
         session = None
         try:
             # Initialize delegate
             delegate = FrameDelegate.alloc().initWithLock_Data_(self.frame_lock, self.shared_frame_data)
             
-            # Get device
-            devices = AVF.AVCaptureDevice.devicesWithMediaType_(AVF.AVMediaTypeVideo)
-            if device_index >= len(devices):
+            # Get device from cached list
+            if device_index >= len(self.devices):
                 print("Device index out of range")
                 return
                 
-            device = devices[device_index]
+            device = self.devices[device_index]
             
             # Find TC001 format
             target_format = None
@@ -178,18 +150,7 @@ class ThermalUSBDevices():
                 session.stopRunning()
 
     def get_latest_frame(self):
-        """
-        Safely retrieve the most recent frame data dict from the lock-protected state.
-        
-        Returns:
-            dict | None: Dictionary containing the frame payload, dimensions, stride, 
-                         and a timestamp. Returns None if no frame has been received yet.
-        """
         with self.frame_lock:
-            # We return a copy to avoid reading while it's being modified
-            # Returning reference can be okay if we only read the timestamp/etc
-            # Actually, the dict holds references to numpy arrays which aren't modified in place by delegate
-            # Delegate replaces 'latest_frame' with a new np.array copy every time
             timestamp = self.shared_frame_data['timestamp']
             
             if self.shared_frame_data['latest_frame'] is None:
