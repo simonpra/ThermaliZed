@@ -15,3 +15,4 @@ venv.bak/
 build/
 dist/ThermaliZed/
 dist/ThermaliZed.app/
+.python-version
