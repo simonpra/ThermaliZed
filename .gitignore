@@ -13,6 +13,5 @@ venv.bak/
 .idea/
 *.log
 build/
-dist/ThermaliZed/
-dist/ThermaliZed.app/
+dist/
 .python-version
