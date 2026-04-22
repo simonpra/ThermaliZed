@@ -21,10 +21,24 @@ def process_thermal_frame(raw_flat_buffer, width, height, stride, params, event_
             'manual_max_raw' (int): Manual maximum raw thermal value (0-65535).
             'scale' (int): Scaling factor for the final display.
             (blur and alpha are now applied upstream by the image_enhancement plugin via RAW_FRAME_PIPELINE)
-        event_bus (EventBus | None): Optional event bus. When provided, a 'RAW_FRAME_PIPELINE'
-            pipeline event is fired after the 16-bit thermal array is assembled. Each subscriber
-            receives (raw_thermal_16bit: np.ndarray[uint16], raw_flat_buffer: np.ndarray[uint8])
-            and may return a modified 16-bit array to steer all downstream processing.
+        event_bus (EventBus | None): Optional event bus. When provided, two pipeline events
+            are fired:
+
+            1. 'RAW_FRAME_PIPELINE'  — fired immediately after the 16-bit array is assembled,
+               before normalisation or colormap.  Subscribers receive:
+                 data : np.ndarray[uint16] — current (possibly modified) 16-bit array
+                 raw  : np.ndarray[uint16] — original unmodified 16-bit array
+               A non-None return replaces `data` for downstream steps.
+
+            2. 'IMAGE_PIPELINE' — fired after the final 8-bit BGR heatmap is scaled.
+               (Alias for the legacy 'PROCESSED_FRAME_PIPELINE')
+               Subscribers receive:
+                 data : np.ndarray[uint8, BGR] — current mutable 8-bit frame
+                 raw  : dict with keys:
+                          '8bit'         → np.ndarray[uint8, BGR] reference copy (unmodified)
+                          '16bit'        → np.ndarray[uint16] original sensor data for math
+                          'thermal_info' → dict of extracted thermal metadata
+               A non-None ndarray return replaces `data` for downstream steps.
 
     Returns:
         tuple: (heatmap_scaled, thermal_info, debug_info)
@@ -155,6 +169,35 @@ def process_thermal_frame(raw_flat_buffer, width, height, stride, params, event_
         except Exception:
              thermal_info['min_c'] = float('nan')
              thermal_info['max_c'] = float('nan')
+
+        # --- Plugin Pipeline: IMAGE_PIPELINE ---
+        # Fired after the final 8-bit BGR heatmap is ready, giving plugins a chance to
+        # draw or manipulate the rendered output before it reaches the display.
+        # Subscribers receive:
+        #   data : np.ndarray[uint8, BGR]  – current (mutable) 8-bit heatmap
+        #   raw  : dict {
+        #            '8bit'         : reference copy of the original 8-bit heatmap
+        #            '16bit'        : original_raw_16bit for temperature math
+        #            'thermal_info' : metadata like min/max temps
+        #          }
+        if event_bus is not None:
+            raw_payload = {
+                '8bit':  heatmap_scaled.copy(),
+                '16bit': original_raw_16bit,
+                'thermal_info': thermal_info.copy(),
+            }
+            # Call new standard pipeline name
+            heatmap_scaled = event_bus.pipeline(
+                'IMAGE_PIPELINE',
+                heatmap_scaled,
+                raw=raw_payload,
+            )
+            # Call legacy pipeline name for backward compatibility
+            heatmap_scaled = event_bus.pipeline(
+                'PROCESSED_FRAME_PIPELINE',
+                heatmap_scaled,
+                raw=raw_payload,
+            )
 
         debug_info['proc_time_ms'] = (time.perf_counter() - _t_start) * 1000.0
         return heatmap_scaled, thermal_info, debug_info

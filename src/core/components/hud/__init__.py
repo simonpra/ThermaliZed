@@ -98,6 +98,9 @@ class HudControls(BaseOverlayControl):
 
     def _on_metadata(self, infos: dict) -> None:
         """Update HUD labels; auto-show on first data if params flag is set."""
+        if not self.winfo_exists():
+            return
+            
         canvas = self._get_canvas()
         if canvas is None:
             return

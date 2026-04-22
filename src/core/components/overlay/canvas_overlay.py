@@ -90,7 +90,12 @@ class CanvasOverlay:
 
     @property
     def visible(self) -> bool:
-        return self._window_id is not None
+        if self._window_id is not None:
+            # If the frame was destroyed by Tkinter (e.g., app restart) without calling hide()
+            if self.overlay_frame is not None and not self.overlay_frame.winfo_exists():
+                return False
+            return True
+        return False
 
     # ------------------------------------------------------------------
     # Override in subclasses

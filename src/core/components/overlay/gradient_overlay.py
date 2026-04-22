@@ -69,6 +69,8 @@ class GradientOverlay(CanvasOverlay):
             )
 
     def _on_colormap_changed(self, cv2_colormap: int) -> None:
+        if not self.visible:
+            return
         if self._gradient_line is not None:
             # Preserve current gamma/alpha and steps when only the colormap changes
             params = self._context.state.get('params', {})
@@ -78,6 +80,9 @@ class GradientOverlay(CanvasOverlay):
             self._gradient_line.update_colormap(cv2_colormap, gamma=gamma, alpha=alpha, steps=steps)
 
     def _on_hud_data(self, hud_data: dict) -> None:
+        if not self.visible:
+            return
+        
         # --- Temperature labels ---
         min_raw = hud_data.get('norm_min', float('nan'))
         max_raw = hud_data.get('norm_max', float('nan'))

@@ -25,11 +25,14 @@ class ThermalViewFrame(ttk.Frame):
         
         self._image_id = None
         self._photo_image = None
-        
+        # Payload cached by our PROCESSED_FRAME_PIPELINE subscriber so
+        # CANVAS_UPDATED can carry it after the image is placed.
+        self._last_raw = None
+
         self.current_width = 1
         self.current_height = 1
         self.last_timestamp = 0.0
-        
+
         self._fps_last_time = time.time()
         self._fps_frames = 0
         self._fps_current = 0.0
@@ -37,6 +40,16 @@ class ThermalViewFrame(ttk.Frame):
     def on_resize(self, event):
         self.current_width = max(event.width, 1)
         self.current_height = max(event.height, 1)
+
+    def _cache_raw(self, data, raw):
+        """IMAGE_PIPELINE subscriber — caches the raw payload.
+
+        Called from inside process_thermal_frame() *before* the canvas image
+        is repositioned.  We store `raw` here and forward it via HUD_DRAW
+        once the image is actually in its final position.
+        """
+        self._last_raw = raw
+        return None  # pass-through — don't modify the image
 
     def on_frame_ready(self, frame_data):
         if not frame_data:
@@ -139,6 +152,19 @@ class ThermalViewFrame(ttk.Frame):
             self.canvas.coords(self._image_id, self.current_width//2, self.current_height//2)
             self.canvas.itemconfig(self._image_id, image=self._photo_image)
 
+        # Fire HUD_DRAW *after* the image is in its final position so
+        # overlay plugins can use the built-in sensor coordinate mapping.
+        bbox = self.canvas.bbox(self._image_id) if self._image_id else None
+        hud_context = {
+            'canvas': self.canvas,
+            'bbox': bbox,
+            'raw_payload': self._last_raw,
+        }
+        self.context.event_bus.publish('HUD_DRAW', hud_context)
+        
+        # Legacy event for backward compatibility
+        self.context.event_bus.publish('CANVAS_UPDATED', self._last_raw)
+
 
 class PluginClass(SystemComponent):
     """Core plugin for rendering the thermal feed."""
@@ -147,6 +173,13 @@ class PluginClass(SystemComponent):
         self.context = context
         self.view = None
         self.context.event_bus.subscribe('FRAME_READY', self._handle_frame)
+        # Cache the raw pipeline payload so we can forward it via HUD_DRAW
+        self.context.event_bus.subscribe('IMAGE_PIPELINE', self._cache_raw)
+        self.context.event_bus.subscribe('PROCESSED_FRAME_PIPELINE', self._cache_raw) # Legacy
+
+    def _cache_raw(self, data, raw):
+        if self.view:
+            self.view._cache_raw(data, raw)
         
     def _handle_frame(self, frame_data):
         if self.view:
