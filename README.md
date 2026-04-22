@@ -1,7 +1,6 @@
 # ThermaliZed
 
-<img width="2067" height="1436" alt="thermalized_screenshot_01" src="https://github.com/user-attachments/assets/251b7fd3-8a62-4232-8835-9cd5ac746439" />
-
+<img width="1592" height="1076" alt="thermalized_screenshot_02" src="https://github.com/user-attachments/assets/898cef14-96ed-4a68-9b30-3717b8f0c031" />
 
 **ThermaliZed**
 
