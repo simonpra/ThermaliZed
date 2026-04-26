@@ -24,7 +24,7 @@ class ButtonIcon(tk.Label):
         
         # Pull standard tk.Label kwargs, merging our custom defaults
         lbl_kwargs = {
-            'cursor': 'pointinghand' if command else '',
+            'cursor': 'hand1' if command else '',
             'borderwidth': 0,
             'highlightthickness': 0
         }
