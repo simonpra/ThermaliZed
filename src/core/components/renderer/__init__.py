@@ -25,8 +25,6 @@ class ThermalViewFrame(ttk.Frame):
         
         self._image_id = None
         self._photo_image = None
-        # Payload cached by our PROCESSED_FRAME_PIPELINE subscriber so
-        # CANVAS_UPDATED can carry it after the image is placed.
         self._last_raw = None
 
         self.current_width = 1
@@ -161,9 +159,6 @@ class ThermalViewFrame(ttk.Frame):
             'raw_payload': self._last_raw,
         }
         self.context.event_bus.publish('HUD_DRAW', hud_context)
-        
-        # Legacy event for backward compatibility
-        self.context.event_bus.publish('CANVAS_UPDATED', self._last_raw)
 
 
 class PluginClass(SystemComponent):

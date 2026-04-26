@@ -135,6 +135,29 @@ class HUDEngine:
         cy = y1 + (sy + 0.5) * self._scale_y
         return cx, cy
 
+    def canvas_to_sensor(self, cx: float, cy: float) -> Optional[Tuple[int, int]]:
+        """
+        Transform a canvas coordinate (e.g. from a mouse event) back to the
+        integer sensor pixel index ``(col, row)``.
+
+        Returns ``None`` when the canvas point lies outside the rendered
+        image area, or when the sensor mapping has not been configured yet.
+        """
+        if not self._image_bbox or not self._sensor_shape:
+            return None
+
+        x1, y1, x2, y2 = self._image_bbox
+        if not (x1 <= cx < x2 and y1 <= cy < y2):
+            return None  # outside the image
+
+        raw_h, raw_w = self._sensor_shape
+        sx = int((cx - x1) / self._scale_x)
+        sy = int((cy - y1) / self._scale_y)
+        # Clamp to valid sensor indices
+        sx = max(0, min(sx, raw_w - 1))
+        sy = max(0, min(sy, raw_h - 1))
+        return sx, sy
+
     # ------------------------------------------------------------------
     # Internal Helpers
     # ------------------------------------------------------------------
@@ -450,6 +473,44 @@ class HUDEngine:
     # ------------------------------------------------------------------
     # Sensor-Mapped Composites
     # ------------------------------------------------------------------
+
+    def draw_sensor_pixel_rect(
+        self,
+        sx: int,
+        sy: int,
+        color: str = "white",
+        width: int = 2,
+    ) -> int:
+        """
+        Draw a rectangle border that exactly covers the canvas area occupied by
+        the sensor pixel at column *sx*, row *sy*.
+
+        The rectangle is aligned to the pixel grid of the rendered image, so it
+        snaps perfectly regardless of the zoom / scale factor.
+        """
+        if not self._image_bbox or not self._sensor_shape:
+            return -1
+
+        x1_img, y1_img, _, _ = self._image_bbox
+        # Top-left canvas corner of the sensor pixel
+        px = x1_img + sx * self._scale_x
+        py = y1_img + sy * self._scale_y
+        # Bottom-right canvas corner
+        px2 = px + self._scale_x
+        py2 = py + self._scale_y
+
+        token = ("sensor_pixel_rect", sx, sy, color, width,
+                 self._scale_x, self._scale_y, x1_img, y1_img)
+
+        def _create():
+            return self.canvas.create_rectangle(
+                px, py, px2, py2,
+                outline=color,
+                fill="",          # transparent fill
+                width=width,
+            )
+
+        return self._draw_cached(token, _create)[0]
 
     def draw_sensor_crosshair(
         self,
