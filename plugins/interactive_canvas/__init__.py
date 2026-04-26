@@ -9,7 +9,7 @@ Behaviour
 * **Hover**     — A thin border follows the mouse, snapping to the exact
                   sensor pixel under the cursor.  Clears automatically
                   when the mouse leaves the image area.
-                  Redraws are driven by a self-contained ``after()`` tick
+                  Redraws are driven by a :class:`TickEngine` ``after()``
                   loop so they are *fully independent of the frame pipeline*
                   (works correctly on frozen / still frames too).
 
@@ -23,13 +23,13 @@ Behaviour
 Architecture — two independent draw layers
 ------------------------------------------
 ┌─────────────────────────────────────────────────────────────┐
-│  Layer A — Hover (raw canvas item, NOT in HUDEngine)        │
+│  Layer A — Hover (raw canvas item, NOT in HUDEngine)         │
 │  • _hover_item_id : single canvas rectangle                  │
-│  • Updated by _tick() via canvas.after() at HOVER_FPS        │
+│  • Updated by TickEngine at HOVER_FPS                        │
 │  • Only redraws when _hover_dirty flag is set by <Motion>    │
 └─────────────────────────────────────────────────────────────┘
 ┌─────────────────────────────────────────────────────────────┐
-│  Layer B — Selection (HUDEngine managed)                     │
+│  Layer B — Selection (HUDEngine managed, LAYER_INTERACTION)  │
 │  • Redrawn inside _on_hud_draw() — fires on new frames,      │
 │    param changes, or window resize.                          │
 │  • Renders border + smart temperature label.                 │
@@ -46,7 +46,7 @@ import tkinter as tk
 from typing import Optional, Tuple
 
 from src.core.plugin_base import SystemComponent
-from src.utils.hud_engine import HUDEngine
+from src.utils.hud import HUDEngine, TickEngine, LAYER_INTERACTION
 from src.utils.functions import to_degrees_c
 
 
@@ -54,20 +54,19 @@ from src.utils.functions import to_degrees_c
 # Visual constants — tweak here without touching logic
 # ---------------------------------------------------------------------------
 
-HOVER_COLOR   = "white"         # hover border colour
-HOVER_WIDTH   = 1               # hover border stroke width (px)
+HOVER_COLOR   = "white"          # hover border colour
+HOVER_WIDTH   = 1                # hover border stroke width (px)
 
-SELECT_COLOR  = "#FFD700"       # gold — visible on all colormaps
-SELECT_WIDTH  = 2               # selection border stroke width (px)
+SELECT_COLOR  = "#FFD700"        # gold — visible on all colormaps
+SELECT_WIDTH  = 2                # selection border stroke width (px)
 
 LABEL_FONT    = ("Helvetica", 10, "bold")
-LABEL_BG      = (0, 0, 0, 180) # semi-transparent black RGBA
+LABEL_BG      = (0, 0, 0, 180)  # semi-transparent black RGBA
 LABEL_FG      = "#FFD700"
 
 # Tick rate for the hover redraw loop.  30 FPS is plenty smooth and
 # generates only ~0.03 ms of canvas work per tick when nothing changed.
-HOVER_FPS     = 30
-_TICK_MS      = max(1, 1000 // HOVER_FPS)
+HOVER_FPS = 30
 
 
 class PluginClass(SystemComponent):
@@ -87,22 +86,19 @@ class PluginClass(SystemComponent):
         # ── Layer A: hover state ──────────────────────────────────────
         # Raw canvas item ID — NOT tracked by HUDEngine so clear() never
         # removes it.
-        self._hover_item_id: Optional[int]         = None
+        self._hover_item_id: Optional[int]           = None
         self._hovered:        Optional[Tuple[int, int]] = None
-        # Set True by <Motion> when the pixel under the cursor changed.
-        # Cleared by the tick after a redraw.
-        self._hover_dirty:    bool                  = False
-        # Guards against spawning multiple after() chains.
-        self._tick_running:   bool                  = False
+        # TickEngine drives the hover redraw loop.
+        self._tick:           Optional[TickEngine]   = None
 
         # ── Layer B: selection state ──────────────────────────────────
-        self._selected:  Optional[Tuple[int, int]] = None
+        self._selected:  Optional[Tuple[int, int]]   = None
         # HUDEngine instance — only used for selection rendering.
-        self._hud:       Optional[HUDEngine]        = None
+        self._hud:       Optional[HUDEngine]          = None
 
         # ── Shared state ──────────────────────────────────────────────
         # Reference to the canvas widget (set on first HUD_DRAW).
-        self._canvas:    Optional[tk.Canvas]        = None
+        self._canvas:    Optional[tk.Canvas]          = None
         # Latest 16-bit sensor frame for temperature look-up.
         self._raw_16bit = None
 
@@ -115,8 +111,8 @@ class PluginClass(SystemComponent):
         context.event_bus.subscribe("HUD_DRAW", self._on_hud_draw)
 
     def on_unload(self, context):
-        # Stop the tick loop on shutdown.
-        self._tick_running = False
+        if self._tick is not None:
+            self._tick.stop()
         self._unbind_canvas()
 
     # ------------------------------------------------------------------
@@ -153,15 +149,16 @@ class PluginClass(SystemComponent):
 
     def _on_motion(self, event: tk.Event) -> None:
         """
-        Translate canvas coords → sensor pixel and set dirty flag.
-        The actual redraw happens in the tick loop, not here.
+        Translate canvas coords → sensor pixel and mark TickEngine dirty.
+        The actual redraw happens in the tick callback, not here.
         """
         if self._hud is None:
             return
         new_pixel = self._hud.canvas_to_sensor(event.x, event.y)
         if new_pixel != self._hovered:
             self._hovered = new_pixel
-            self._hover_dirty = True   # signal tick to redraw
+            if self._tick is not None:
+                self._tick.mark_dirty()
 
     def _on_click(self, event: tk.Event) -> None:
         """Pin/move the selection to the currently hovered pixel."""
@@ -182,45 +179,22 @@ class PluginClass(SystemComponent):
         """Hide hover when the mouse leaves the canvas."""
         if self._hovered is not None:
             self._hovered = None
-            self._hover_dirty = True
+            if self._tick is not None:
+                self._tick.mark_dirty()
 
     # ------------------------------------------------------------------
-    # Hover tick loop  (Layer A — independent of the frame pipeline)
+    # Hover tick callback  (Layer A — independent of the frame pipeline)
     # ------------------------------------------------------------------
 
-    def _start_tick(self) -> None:
-        """Kick off the after() loop if not already running."""
-        if not self._tick_running and self._canvas is not None:
-            self._tick_running = True
-            self._canvas.after(_TICK_MS, self._tick)
-
-    def _tick(self) -> None:
+    def _on_tick(self) -> None:
         """
-        Lightweight periodic callback (~30 FPS).
-        Redraws the hover border only when the cursor has moved to a new
-        sensor pixel since the last tick (_hover_dirty flag).
+        Called by TickEngine when dirty (~30 FPS, only on cursor movement).
+        Redraws the hover border for the current sensor pixel.
         """
         canvas = self._canvas
         if canvas is None:
-            self._tick_running = False
             return
-
-        try:
-            if not canvas.winfo_exists():
-                self._tick_running = False
-                return
-        except tk.TclError:
-            self._tick_running = False
-            return
-
-        # Redraw only when something changed — zero overhead otherwise.
-        if self._hover_dirty:
-            self._redraw_hover(canvas)
-            self._hover_dirty = False
-
-        # Re-schedule unconditionally while the plugin is alive.
-        if self._tick_running:
-            canvas.after(_TICK_MS, self._tick)
+        self._redraw_hover(canvas)
 
     def _redraw_hover(self, canvas: tk.Canvas) -> None:
         """
@@ -228,7 +202,7 @@ class PluginClass(SystemComponent):
         current hovered pixel.  This is a direct canvas call — no
         HUDEngine involved — to keep it as cheap as possible.
         """
-        # ── Remove old hover item ─────────────────────────────────────
+        # Remove old hover item
         if self._hover_item_id is not None:
             try:
                 canvas.delete(self._hover_item_id)
@@ -236,19 +210,20 @@ class PluginClass(SystemComponent):
                 pass
             self._hover_item_id = None
 
-        # ── Draw new hover item ───────────────────────────────────────
+        # Draw new hover item
         hud = self._hud
         if self._hovered is None or hud is None:
             return
-        if not hud._image_bbox or not hud._sensor_shape:
+
+        mapper = hud.mapper
+        if not mapper.image_bbox or not mapper.sensor_shape:
             return
 
-        sx, sy = self._hovered
-        x1_img, y1_img, _, _ = hud._image_bbox
-        px  = x1_img + sx  * hud._scale_x
-        py  = y1_img + sy  * hud._scale_y
-        px2 = px + hud._scale_x
-        py2 = py + hud._scale_y
+        sx, sy  = self._hovered
+        bounds  = mapper.get_pixel_bounds(sx, sy)
+        if bounds is None:
+            return
+        px, py, px2, py2 = bounds
 
         self._hover_item_id = canvas.create_rectangle(
             px, py, px2, py2,
@@ -268,11 +243,12 @@ class PluginClass(SystemComponent):
         Called by the renderer after each frame is placed on the canvas.
         Manages canvas binding, HUDEngine init, and selection drawing.
 
-        hud_context keys
-        ----------------
-        canvas      : tk.Canvas
-        bbox        : (x1, y1, x2, y2) bounding box of the rendered image
-        raw_payload : dict with '16bit' → np.ndarray[uint16]
+        Parameters
+        ----------
+        hud_context : dict
+            ``canvas``      — tk.Canvas
+            ``bbox``        — (x1, y1, x2, y2) bounding box of the rendered image
+            ``raw_payload`` — dict with ``'16bit'`` → np.ndarray[uint16]
         """
         canvas      = hud_context.get("canvas")
         bbox        = hud_context.get("bbox")
@@ -287,21 +263,26 @@ class PluginClass(SystemComponent):
 
         self._raw_16bit = raw_16bit
 
-        # ── Init HUDEngine for selection (Layer B) ────────────────────
+        # Init HUDEngine for selection (Layer B)
         if self._hud is None or self._hud.canvas is not canvas:
             self._hud = HUDEngine(canvas)
 
-        # ── Bind canvas + start tick on first valid frame ─────────────
+        # Bind canvas + start TickEngine on first valid frame
         self._bind_canvas(canvas)
-        self._start_tick()
+        if self._tick is None or self._tick._canvas is not canvas:
+            if self._tick is not None:
+                self._tick.stop()
+            self._tick = TickEngine(canvas, fps=HOVER_FPS)
+            self._tick.on_tick(self._on_tick)
+            self._tick.start()
 
-        # ── Keep coordinate mapping current (image may have moved) ────
+        # Keep coordinate mapping current (image may have moved on resize)
         self._hud.set_sensor_mapping(bbox, raw_16bit.shape)
 
-        # ── Draw selection border + temperature label ─────────────────
+        # Draw selection border + temperature label
         self._draw_selection()
 
-        # ── After HUD items are drawn, raise hover on top ─────────────
+        # After HUD items are drawn, raise hover on top
         if self._hover_item_id is not None:
             try:
                 canvas.tag_raise(self._hover_item_id)
@@ -315,7 +296,10 @@ class PluginClass(SystemComponent):
     def _draw_selection(self) -> None:
         """Clear and redraw the selection border and temperature label."""
         hud = self._hud
-        hud.clear()  # removes only items owned by this HUDEngine instance
+        if hud is None:
+            return
+        # Clear only the interaction layer — hover layer (raw canvas item) is untouched
+        hud.clear(layer=LAYER_INTERACTION)
 
         if self._selected is None:
             return
@@ -323,7 +307,8 @@ class PluginClass(SystemComponent):
         sx, sy = self._selected
 
         # Border
-        hud.draw_sensor_pixel_rect(sx, sy, color=SELECT_COLOR, width=SELECT_WIDTH)
+        hud.draw_sensor_pixel_rect(sx, sy, color=SELECT_COLOR, width=SELECT_WIDTH,
+                                   layer=LAYER_INTERACTION)
 
         # Temperature label
         raw = self._raw_16bit
@@ -336,4 +321,5 @@ class PluginClass(SystemComponent):
                 color=LABEL_FG,
                 font=LABEL_FONT,
                 bg_color=LABEL_BG,
+                layer=LAYER_INTERACTION,
             )

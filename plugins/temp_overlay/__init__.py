@@ -2,7 +2,7 @@ import cv2
 import tkinter as tk
 from src.core.plugin_base import SystemComponent
 from src.utils.functions import to_degrees_c
-from src.utils.hud_engine import HUDEngine
+from src.utils.hud import HUDEngine, LAYER_MAIN
 
 
 class PluginClass(SystemComponent):
@@ -19,16 +19,14 @@ class PluginClass(SystemComponent):
         self.context = None
         # HUDEngine instance — created once the canvas is available.
         self._hud: HUDEngine | None = None
-        # Keep a snapshot of the last raw frame so update() can redraw.
-        self._last_raw_16bit = None  # cached uint16 ndarray for resize redraws
+        # Keep a snapshot of the last draw args so update() can redraw.
+        self._last_draw_args = None
 
     def on_load(self, context):
         self.context = context
         if hasattr(self.context, 'event_bus'):
             # Draw HUD after the canvas image has been placed at its final position
-            self.context.event_bus.subscribe(
-                'HUD_DRAW', self._on_hud_draw
-            )
+            self.context.event_bus.subscribe('HUD_DRAW', self._on_hud_draw)
 
     # ------------------------------------------------------------------
     # Pipeline callback
@@ -42,10 +40,10 @@ class PluginClass(SystemComponent):
         Parameters
         ----------
         hud_context : dict
-            Contains 'canvas', 'bbox', and 'raw_payload'
+            Contains ``'canvas'``, ``'bbox'``, and ``'raw_payload'``.
         """
-        canvas = hud_context.get('canvas')
-        bbox = hud_context.get('bbox')
+        canvas      = hud_context.get('canvas')
+        bbox        = hud_context.get('bbox')
         raw_payload = hud_context.get('raw_payload')
 
         if not canvas or not bbox or not raw_payload:
@@ -63,10 +61,8 @@ class PluginClass(SystemComponent):
     # ------------------------------------------------------------------
 
     def update(self):
-        """
-        Trigger a redraw using the most recently cached args.
-        """
-        if hasattr(self, '_last_draw_args'):
+        """Trigger a redraw using the most recently cached args."""
+        if self._last_draw_args is not None:
             self._draw(*self._last_draw_args)
 
     # ------------------------------------------------------------------
@@ -76,7 +72,7 @@ class PluginClass(SystemComponent):
     def _draw(self, canvas: tk.Canvas, bbox: tuple, raw_16bit) -> None:
         """Perform the full HUD draw pass for one frame."""
 
-        # --- Lazy-init or re-init the HUDEngine if the canvas changed ---
+        # Lazy-init or re-init the HUDEngine if the canvas changed
         if self._hud is None or self._hud.canvas is not canvas:
             self._hud = HUDEngine(canvas)
             # Register update() as the draw-fn so resize triggers a redraw
@@ -84,29 +80,31 @@ class PluginClass(SystemComponent):
 
         hud = self._hud
         hud.clear()
-        
-        # Configure sensor mapping directly from the image bounding box
+
+        # Configure sensor mapping from the image bounding box
         hud.set_sensor_mapping(bbox, raw_16bit.shape)
 
-        # 3. Compute min / max temperature values
+        # Compute min / max temperature values
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(raw_16bit)
         min_temp_c = to_degrees_c(min_val)
         max_temp_c = to_degrees_c(max_val)
 
-        # 4. Draw MAX hotspot — red crosshair + smart label
-        hud.draw_sensor_crosshair(max_loc[0], max_loc[1], color="red")
+        # Draw MAX hotspot — red crosshair + smart label
+        hud.draw_sensor_crosshair(max_loc[0], max_loc[1], color="red", layer=LAYER_MAIN)
         hud.draw_sensor_smart_text(
             max_loc[0], max_loc[1],
             text=f"MAX: {max_temp_c} °C",
             color="red",
             bg_color="black",
+            layer=LAYER_MAIN,
         )
 
-        # 5. Draw MIN coldspot — cyan crosshair + smart label
-        hud.draw_sensor_crosshair(min_loc[0], min_loc[1], color="#00FFFF")
+        # Draw MIN coldspot — cyan crosshair + smart label
+        hud.draw_sensor_crosshair(min_loc[0], min_loc[1], color="#00FFFF", layer=LAYER_MAIN)
         hud.draw_sensor_smart_text(
             min_loc[0], min_loc[1],
             text=f"MIN: {min_temp_c} °C",
             color="#00FFFF",
             bg_color="black",
+            layer=LAYER_MAIN,
         )
