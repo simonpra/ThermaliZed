@@ -51,7 +51,7 @@ class SnapshotFrame(ttk.LabelFrame):
         if not os.path.exists(initial_dir):
             try:
                 os.makedirs(initial_dir)
-            except:
+            except OSError:
                 initial_dir = os.path.expanduser("~")
 
         timestamp_str = time.strftime("%Y%m%d_%H%M%S")

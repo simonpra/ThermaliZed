@@ -60,8 +60,8 @@ HOVER_WIDTH   = 1                # hover border stroke width (px)
 SELECT_COLOR  = "#FFD700"        # gold — visible on all colormaps
 SELECT_WIDTH  = 2                # selection border stroke width (px)
 
-LABEL_FONT    = ("Helvetica", 10, "bold")
-LABEL_BG      = (0, 0, 0, 180)  # semi-transparent black RGBA
+LABEL_FONT    = ("Helvetica", 10, "italic")
+LABEL_BG      = (0, 0, 0, 128)  # semi-transparent black RGBA
 LABEL_FG      = "#FFD700"
 
 # Tick rate for the hover redraw loop.  30 FPS is plenty smooth and
@@ -86,13 +86,13 @@ class PluginClass(SystemComponent):
         # ── Layer A: hover state ──────────────────────────────────────
         # Raw canvas item ID — NOT tracked by HUDEngine so clear() never
         # removes it.
-        self._hover_item_id: Optional[int]           = None
+        self._hover_item_id:  Optional[int]             = None
         self._hovered:        Optional[Tuple[int, int]] = None
         # TickEngine drives the hover redraw loop.
-        self._tick:           Optional[TickEngine]   = None
+        self._tick:           Optional[TickEngine]      = None
 
         # ── Layer B: selection state ──────────────────────────────────
-        self._selected:  Optional[Tuple[int, int]]   = None
+        self._selected:  Optional[Tuple[int, int]]    = None
         # HUDEngine instance — only used for selection rendering.
         self._hud:       Optional[HUDEngine]          = None
 
@@ -269,7 +269,7 @@ class PluginClass(SystemComponent):
 
         # Bind canvas + start TickEngine on first valid frame
         self._bind_canvas(canvas)
-        if self._tick is None or self._tick._canvas is not canvas:
+        if self._tick is None or self._tick.canvas is not canvas:
             if self._tick is not None:
                 self._tick.stop()
             self._tick = TickEngine(canvas, fps=HOVER_FPS)

@@ -73,6 +73,11 @@ class TickEngine:
         """``True`` if a redraw has been requested since the last tick."""
         return self._dirty
 
+    @property
+    def canvas(self) -> tk.Canvas:
+        """Access the underlying Tkinter canvas reference."""
+        return self._canvas
+
     def on_tick(self, callback: Callable[[], None]) -> None:
         """
         Register a callback to be invoked each tick when the engine is dirty.

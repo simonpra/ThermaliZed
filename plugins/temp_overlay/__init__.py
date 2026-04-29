@@ -93,7 +93,7 @@ class PluginClass(SystemComponent):
         hud.draw_sensor_crosshair(max_loc[0], max_loc[1], color="red", layer=LAYER_MAIN)
         hud.draw_sensor_smart_text(
             max_loc[0], max_loc[1],
-            text=f"MAX: {max_temp_c} °C",
+            text=f"MAX: {max_temp_c:.1f} °C",
             color="red",
             bg_color="black",
             layer=LAYER_MAIN,
@@ -103,7 +103,7 @@ class PluginClass(SystemComponent):
         hud.draw_sensor_crosshair(min_loc[0], min_loc[1], color="#00FFFF", layer=LAYER_MAIN)
         hud.draw_sensor_smart_text(
             min_loc[0], min_loc[1],
-            text=f"MIN: {min_temp_c} °C",
+            text=f"MIN: {min_temp_c:.1f} °C",
             color="#00FFFF",
             bg_color="black",
             layer=LAYER_MAIN,
