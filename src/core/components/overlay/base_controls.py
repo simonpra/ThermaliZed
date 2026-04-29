@@ -70,7 +70,7 @@ class BaseOverlayControl(BaseControlFrame):
         self.current_row = row
 
         # Schedule _toggle_overlay to set the initial state of the overlay
-        # using Tkinter native methode after_idle wich fires
+        # using Tkinter native method after_idle wich fires
         # once the main loop starts, ensuring the canvas is available
         if self.params[param_key]:
             self.after_idle(self._toggle_overlay)

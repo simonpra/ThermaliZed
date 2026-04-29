@@ -92,7 +92,7 @@ class PluginClass(SystemComponent):
         self._tick:           Optional[TickEngine]      = None
 
         # ── Layer B: selection state ──────────────────────────────────
-        self._selected:  Optional[Tuple[int, int]]    = None
+        self._selected:       Tuple[Tuple[int, int]]    = ()
         # HUDEngine instance — only used for selection rendering.
         self._hud:       Optional[HUDEngine]          = None
 
@@ -166,7 +166,15 @@ class PluginClass(SystemComponent):
             return
         result = self._hud.canvas_to_sensor(event.x, event.y)
         if result is not None:
-            self._selected = result
+            # event.state & 0x0001 checks the bitmask for the Shift (Maj) key
+            is_shift_pressed = bool(event.state & 0x0001)
+            
+            if is_shift_pressed:
+                # Do something specific when Shift + Click occurs
+                self._selected += (result,)
+            else:
+                self._selected = (result,)
+                
             # Force an immediate redraw — HUD_DRAW may not fire on still frames.
             self._draw_selection()
 
@@ -301,25 +309,27 @@ class PluginClass(SystemComponent):
         # Clear only the interaction layer — hover layer (raw canvas item) is untouched
         hud.clear(layer=LAYER_INTERACTION)
 
-        if self._selected is None:
+        if self._selected == ():  #Empty tuple
             return
-
-        sx, sy = self._selected
-
-        # Border
-        hud.draw_sensor_pixel_rect(sx, sy, color=SELECT_COLOR, width=SELECT_WIDTH,
-                                   layer=LAYER_INTERACTION)
-
+        
         # Temperature label
         raw = self._raw_16bit
-        if raw is not None:
-            raw_val = int(raw[sy, sx])
-            temp_c  = to_degrees_c(raw_val)
-            hud.draw_sensor_smart_text(
-                sx, sy,
-                text=f"{temp_c:.1f} °C",
-                color=LABEL_FG,
-                font=LABEL_FONT,
-                bg_color=LABEL_BG,
-                layer=LAYER_INTERACTION,
-            )
+
+        for selection in self._selected:
+            sx, sy = selection
+
+            # Border
+            hud.draw_sensor_pixel_rect(sx, sy, color=SELECT_COLOR, width=SELECT_WIDTH,
+                                    layer=LAYER_INTERACTION)
+
+            if raw is not None:
+                raw_val = int(raw[sy, sx])
+                temp_c  = to_degrees_c(raw_val)
+                hud.draw_sensor_smart_text(
+                    sx, sy,
+                    text=f"{temp_c:.1f} °C",
+                    color=LABEL_FG,
+                    font=LABEL_FONT,
+                    bg_color=LABEL_BG,
+                    layer=LAYER_INTERACTION,
+                )

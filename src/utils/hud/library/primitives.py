@@ -134,6 +134,9 @@ def create_rounded_rect(
     photo = rect_cache.get(cache_key)
 
     if photo is None:
+        if len(rect_cache) >= 128:
+            rect_cache.clear()
+
         img      = Image.new("RGBA", (w, h), (0, 0, 0, 0))
         draw_ctx = ImageDraw.Draw(img)
         draw_ctx.rounded_rectangle(

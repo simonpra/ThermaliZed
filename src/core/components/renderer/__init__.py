@@ -62,7 +62,19 @@ class ThermalViewFrame(ttk.Frame):
         params_processor['colormap_code'] = COLORMAPS[idx][0]
         
         # Avoid redundant redraws if nothing has changed
-        current_state = (timestamp, str(params_processor), self.current_width, self.current_height)
+        render_params = (
+            params_processor.get('colormap_code'),
+            params_processor.get('manual_leveling', False),
+            params_processor.get('manual_min_raw'),
+            params_processor.get('manual_max_raw'),
+            params_processor.get('scale', 1),
+            params_processor.get('edge_detection', False),
+            params_processor.get('edge_threshold', 100),
+            params_processor.get('alpha', 1.0),
+            params_processor.get('gamma', 1.0),
+            params_processor.get('blur', 0),
+        )
+        current_state = (timestamp, render_params, self.current_width, self.current_height)
         if getattr(self, '_last_render_state', None) == current_state:
             return
             
@@ -170,7 +182,6 @@ class PluginClass(SystemComponent):
         self.context.event_bus.subscribe('FRAME_READY', self._handle_frame)
         # Cache the raw pipeline payload so we can forward it via HUD_DRAW
         self.context.event_bus.subscribe('IMAGE_PIPELINE', self._cache_raw)
-        self.context.event_bus.subscribe('PROCESSED_FRAME_PIPELINE', self._cache_raw) # Legacy
 
     def _cache_raw(self, data, raw):
         if self.view:
