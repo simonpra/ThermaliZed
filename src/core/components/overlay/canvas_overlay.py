@@ -66,7 +66,7 @@ class CanvasOverlay:
 
         self._canvas = canvas
 
-        if self.overlay_frame is None:
+        if self.overlay_frame is None or not self.overlay_frame.winfo_exists():
             self.overlay_frame = ttk.Frame(canvas, padding=2, relief='flat', borderwidth=1)
             self._build_overlay_content(self.overlay_frame)
 
@@ -117,5 +117,6 @@ class CanvasOverlay:
 
     def _on_canvas_resize(self, event: tk.Event) -> None:
         if self._window_id and self._canvas:
-            cx, cy = self._compute_canvas_xy(event.width, event.height)
-            self._canvas.coords(self._window_id, cx, cy)
+            if self.overlay_frame is not None and self.overlay_frame.winfo_exists():
+                cx, cy = self._compute_canvas_xy(event.width, event.height)
+                self._canvas.coords(self._window_id, cx, cy)

@@ -133,8 +133,15 @@ class AppContext:
                     # We expect a PluginClass inside the __init__.py of the module folder
                     if hasattr(module, 'PluginClass'):
                         plugin_instance = module.PluginClass()
-                        plugin_instance.on_load(self)
-                        self.plugins.append(plugin_instance)
-                        print(f"Loaded Plugin: {module_name}")
+                        try:
+                            plugin_instance.on_load(self)
+                            self.plugins.append(plugin_instance)
+                            print(f"Loaded Plugin: {module_name}")
+                        except Exception as e:
+                            print(f"Failed to load plugin {module_name} during on_load: {e}")
+                            try:
+                                plugin_instance.on_unload(self)
+                            except Exception as unload_e:
+                                print(f"Error during cleanup of plugin {module_name}: {unload_e}")
                 except Exception as e:
-                    print(f"Failed to load plugin {module_name}: {e}")
+                    print(f"Failed to import plugin {module_name}: {e}")

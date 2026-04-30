@@ -5,12 +5,25 @@ All notable changes to the Thermal Viewer application will be documented in this
 ## [0.0.3-alpha] - Unreleased
 
 ### Added
+- **HUD Engine Package** (`src/utils/hud/`): Refactored the monolithic `hud_engine.py` (580 lines) into a clean, modular package:
+  - `core.py` — `HUDEngine` class with layer-aware registry, frame deduplication, and PIL memoisation.
+  - `mapper.py` — `CoordMapper`, a Tkinter-free class for sensor ↔ canvas coordinate transforms.  Usable and testable independently of any GUI.
+  - `interaction.py` — `TickEngine`, a reusable async redraw driver built on `canvas.after()`.
+  - `library/primitives.py` — Stateless canvas creators: `create_text`, `create_rounded_rect`, `create_svg_icon`.
+  - `library/composites.py` — Higher-level elements: `create_crosshair`, `create_text_rect`, `create_smart_text`.
+  - `library/thermal.py` — Sensor-space elements: `create_sensor_pixel_rect`, `create_sensor_crosshair`, `create_sensor_smart_text`.
+- **Layer System**: `HUDEngine` now organises canvas items into named z-index layers (multiples of 100): `LAYER_BACKGROUND=0`, `LAYER_MAIN=100`, `LAYER_INTERACTION=200`, `LAYER_TOP=300`.  `clear(layer=N)` removes only items on a specific layer without affecting others.
+- **`TickEngine`**: Standalone high-frequency async pipeline class.  Replaces any ad-hoc `after()` loop pattern with a clean `start()` / `stop()` / `mark_dirty()` / `on_tick(cb)` API.
+- **HUD Developer Guide** (`docs/HUD_ENGINE.md`): Wiki-style documentation covering the package architecture, layer system, sync vs async pipelines, coordinate mapping, public API reference, and performance tips.
 - **Cross-Platform Device Architecture**: Implemented a robust `ThermalDeviceManager` to automatically detect the host OS and load the appropriate backend.
 - **OpenCV Backend Stub**: Added a generic OpenCV device backend to gracefully support future Windows and Linux system integration.
 - **Device Refresh Controls**: Added a dedicated `↻` refresh button next to the device selection dropdown, allowing users to scan for recently plugged-in cameras without restarting the application.
 - **Unified Pipeline Context**: Introduced a `HUD_DRAW` pipeline event equipped with a rich context dictionary, removing the need for plugins to guess drawing bounds or canvas scales.
 
 ### Changed
+- **`interactive_canvas` Plugin Refactor**: Replaced the hand-rolled `after()` hover loop with `TickEngine`.  The plugin now accesses `hud.mapper.get_pixel_bounds()` / `hud.mapper.image_bbox` instead of private `hud._scale_x` / `hud._image_bbox` attributes.  Selection drawing calls `hud.clear(layer=LAYER_INTERACTION)` so the hover border (raw canvas item) is never accidentally cleared.
+- **`temp_overlay` Plugin Refactor**: Updated import path to `from src.utils.hud import HUDEngine` and added explicit `layer=LAYER_MAIN` to all draw calls.
+- **`src/utils/hud_engine.py`**: Replaced the 580-line monolith with a clean re-export module that forwards `HUDEngine`, `CoordMapper`, `TickEngine`, and layer constants from the new package.  Existing `from src.utils.hud_engine import HUDEngine` imports continue to work unchanged.
 - **Thermal Pipeline Routing**: Refactored the internal rendering loops to explicitly decouple 16-bit sensor math (`RAW_PIPELINE`), 8-bit image styling (`IMAGE_PIPELINE`), and Tkinter vector mapping (`HUD_DRAW`).
 - **Dynamic HUD Engine Scaling**: Integrated automated sensor-to-canvas ratio logic directly into the `HUDEngine`, allowing extensions like the temperature overlay to draw using constant "sensor" coordinates regardless of how far the application is zoomed.
 - **Device Caching Security**: The hardware scanning logic now securely caches device object profiles during discovery. This fixes a critical bug where UI indexing could mismatch and attempt to load standard webcams instead of the TC001.

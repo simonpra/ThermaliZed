@@ -21,6 +21,10 @@ class SnapshotFrame(ttk.LabelFrame):
         
         self._build_ui()
         
+    def cleanup(self):
+        """Unsubscribe from events when destroyed or unloaded."""
+        self.context.event_bus.unsubscribe('FRAME_READY', self._on_frame_ready)
+        
     def _build_ui(self):
         # Tools layout
         tools_frame = ttk.Frame(self)
@@ -51,7 +55,7 @@ class SnapshotFrame(ttk.LabelFrame):
         if not os.path.exists(initial_dir):
             try:
                 os.makedirs(initial_dir)
-            except:
+            except OSError:
                 initial_dir = os.path.expanduser("~")
 
         timestamp_str = time.strftime("%Y%m%d_%H%M%S")
@@ -226,11 +230,19 @@ class PluginClass(SystemComponent):
     
     def on_load(self, context):
         self.context = context
+        self.ui_components = []
         
     def get_ui(self, parent_widget, zone):
         if zone == 'left_sidebar':
             wrapper = ttk.Frame(parent_widget, padding=5)
             ui = SnapshotFrame(wrapper, self.context)
             ui.pack(fill=tk.BOTH, expand=False, pady=0, padx=0)
+            self.ui_components.append(ui)
             return wrapper
         return None
+
+    def on_unload(self, context):
+        for ui in self.ui_components:
+            if hasattr(ui, 'cleanup'):
+                ui.cleanup()
+        self.ui_components.clear()
