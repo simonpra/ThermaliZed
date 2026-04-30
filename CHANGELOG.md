@@ -2,7 +2,7 @@
 
 All notable changes to the Thermal Viewer application will be documented in this file.
 
-## [0.0.3-alpha] - Unreleased
+## [0.1.0-alpha] - 2026-04-30
 
 ### Added
 - **HUD Engine Package** (`src/utils/hud/`): Refactored the monolithic `hud_engine.py` (580 lines) into a clean, modular package:
@@ -19,6 +19,7 @@ All notable changes to the Thermal Viewer application will be documented in this
 - **OpenCV Backend Stub**: Added a generic OpenCV device backend to gracefully support future Windows and Linux system integration.
 - **Device Refresh Controls**: Added a dedicated `↻` refresh button next to the device selection dropdown, allowing users to scan for recently plugged-in cameras without restarting the application.
 - **Unified Pipeline Context**: Introduced a `HUD_DRAW` pipeline event equipped with a rich context dictionary, removing the need for plugins to guess drawing bounds or canvas scales.
+- **Robustness**: Safe cleanup in `AppContext` when plugin loading fails; `SnapshotFrame` now unsubscribes from event buses on unload.
 
 ### Changed
 - **`interactive_canvas` Plugin Refactor**: Replaced the hand-rolled `after()` hover loop with `TickEngine`.  The plugin now accesses `hud.mapper.get_pixel_bounds()` / `hud.mapper.image_bbox` instead of private `hud._scale_x` / `hud._image_bbox` attributes.  Selection drawing calls `hud.clear(layer=LAYER_INTERACTION)` so the hover border (raw canvas item) is never accidentally cleared.
@@ -28,9 +29,12 @@ All notable changes to the Thermal Viewer application will be documented in this
 - **Dynamic HUD Engine Scaling**: Integrated automated sensor-to-canvas ratio logic directly into the `HUDEngine`, allowing extensions like the temperature overlay to draw using constant "sensor" coordinates regardless of how far the application is zoomed.
 - **Device Caching Security**: The hardware scanning logic now securely caches device object profiles during discovery. This fixes a critical bug where UI indexing could mismatch and attempt to load standard webcams instead of the TC001.
 - **Modular Component Updates**: Console toggle button alignment was shifted vertically, and custom Tkinter components now utilize native `pointinghand` cursors.
+- **Standardized Temperature Formatting**: Enforced `:.1f` precision across all HUD and overlay components.
 
 ### Fixed
 - **Orphaned Event Listeners**: Hardened Tkinter component teardown flows across overlays (`GradientOverlay`, `HudOverlay`). Implemented strict `winfo_exists()` checks to prevent the EventBus from spamming `invalid command name` exceptions on destroyed widgets during UI hot-reloads.
+- **Snapshot Stability**: Caught specific `OSError` in snapshot loading to prevent application crashes on invalid files.
+- **HUD Performance**: Implemented LRU cache for primitive drawing and fixed redundant processing on canvas resize.
 
 ## [0.0.2-alpha] - Previous Updates
 

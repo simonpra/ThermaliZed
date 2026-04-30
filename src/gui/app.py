@@ -1,3 +1,5 @@
+import os
+import sys
 import tkinter as tk
 from tkinter import ttk
 from src.gui.components import Frame, PanedWindow, ScrollableFrame
@@ -9,7 +11,8 @@ class ThermalApp(tk.Tk):
     def __init__(self):
         super().__init__()
         
-        self.title("ThermaliZed - Thermal Camera Viewer")
+        self.version = self._load_version()
+        self.title(f"ThermaliZed v{self.version} — Thermal Camera Viewer")
         self.geometry("1000x750")
         self.minsize(800, 600)
         
@@ -23,6 +26,22 @@ class ThermalApp(tk.Tk):
         
         # Close handler
         self.protocol("WM_DELETE_WINDOW", self._on_closing)
+
+    def _load_version(self):
+        """Reads the application version from the VERSION file in the root."""
+        if getattr(sys, 'frozen', False):
+            base_dir = sys._MEIPASS
+        else:
+            base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+            
+        version_path = os.path.join(base_dir, 'VERSION')
+        try:
+            if os.path.exists(version_path):
+                with open(version_path, 'r') as f:
+                    return f.read().strip()
+        except Exception as e:
+            print(f"Error reading VERSION file: {e}")
+        return "0.0.0-unknown"
 
     def _build_dynamic_zones(self):
         """
