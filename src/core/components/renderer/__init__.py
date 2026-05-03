@@ -73,6 +73,7 @@ class ThermalViewFrame(ttk.Frame):
             params_processor.get('alpha', 1.0),
             params_processor.get('gamma', 1.0),
             params_processor.get('blur', 0),
+            params_processor.get('gradient_step', 0.0),
         )
         current_state = (timestamp, render_params, self.current_width, self.current_height)
         if getattr(self, '_last_render_state', None) == current_state:
