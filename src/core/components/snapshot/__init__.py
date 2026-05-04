@@ -18,12 +18,16 @@ class SnapshotFrame(ttk.LabelFrame):
         self.last_frame_data = None
         
         self.context.event_bus.subscribe('FRAME_READY', self._on_frame_ready)
+        self.context.event_bus.subscribe('LOAD_SNAPSHOT_REQUEST', self._on_load_request)
+        self.context.event_bus.subscribe('SAVE_SNAPSHOT_REQUEST', self._on_save_request)
         
         self._build_ui()
         
     def cleanup(self):
         """Unsubscribe from events when destroyed or unloaded."""
         self.context.event_bus.unsubscribe('FRAME_READY', self._on_frame_ready)
+        self.context.event_bus.unsubscribe('LOAD_SNAPSHOT_REQUEST', self._on_load_request)
+        self.context.event_bus.unsubscribe('SAVE_SNAPSHOT_REQUEST', self._on_save_request)
         
     def _build_ui(self):
         # Tools layout
@@ -45,6 +49,12 @@ class SnapshotFrame(ttk.LabelFrame):
         # wait, if frozen, frame_data IS the frozen frame.
         if 'frozen_frame_data' not in self.context.state or self.context.state['frozen_frame_data'] is None:
             self.last_frame_data = frame_data
+
+    def _on_save_request(self, data=None):
+        self._take_snapshot()
+        
+    def _on_load_request(self, data=None):
+        self._load_snapshot()
 
     def _take_snapshot(self):
         if not self.last_frame_data:
