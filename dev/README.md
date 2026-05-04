@@ -22,6 +22,18 @@ Ensure you have Python 3.11+ installed. The `ttk` version 9+ is required for the
    pip install --upgrade pip
    ```
 2. Install the required dependencies:
+
+   **On macOS:**
+   ```bash
+   pip install -r requirements-mac.txt
+   ```
+
+   **On Windows:**
+   ```bash
+   pip install -r requirements-win.txt
+   ```
+
+   **Core only (headless/other):**
    ```bash
    pip install -r requirements.txt
    ```

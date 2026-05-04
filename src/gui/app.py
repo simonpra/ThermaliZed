@@ -24,6 +24,10 @@ class ThermalApp(tk.Tk):
         self.context = AppContext(self)
         self._mount_plugins()
         
+        # Setup application menu
+        from src.gui.menu import ApplicationMenu
+        self.app_menu = ApplicationMenu(self)
+        
         # Close handler
         self.protocol("WM_DELETE_WINDOW", self._on_closing)
 
