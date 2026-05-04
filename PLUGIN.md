@@ -275,6 +275,8 @@ class PluginClass(SystemComponent):
 | `'main_content'` | Centre — the main canvas area     |
 | `'bottom_bar'`   | Bottom status / console strip     |
 
+![UI Zones](./docs/HUD/assets/ui-zones.svg)
+
 ---
 
 ## Useful Utilities

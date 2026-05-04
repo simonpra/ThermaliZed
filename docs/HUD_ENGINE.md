@@ -1,5 +1,8 @@
 # HUD Engine — Developer Guide
 
+> [!TIP]
+> Looking for a tutorial? Check out the **[In-Depth HUD Tutorial Series](HUD/README.md)**.
+
 A modular, layer-aware HUD drawing engine for Tkinter canvas overlays.
 
 ---
