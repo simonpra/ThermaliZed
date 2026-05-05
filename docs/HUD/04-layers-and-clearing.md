@@ -1,4 +1,4 @@
-# HUD Engine — Part 3: Layers and Clearing
+# HUD Engine — Part 4: Layers and Clearing
 
 Managing a complex HUD with multiple plugins requires a way to organize items so they don't overlap in messy ways. The HUDEngine uses a **Layer System**.
 
@@ -68,4 +68,4 @@ def on_hud_draw(self, hud_context):
 
 ## Next Steps
 
-In [Part 4: Interaction with TickEngine](04-interaction-with-tickengine.md), we'll learn how to make the HUD responsive to mouse movement without lagging the main video feed.
+In [Part 5: Interaction with TickEngine](05-interaction-with-tickengine.md), we'll learn how to make the HUD responsive to mouse movement without lagging the main video feed.

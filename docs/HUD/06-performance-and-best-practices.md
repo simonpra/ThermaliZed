@@ -1,4 +1,4 @@
-# HUD Engine — Part 5: Performance and Best Practices
+# HUD Engine — Part 6: Performance and Best Practices
 
 The HUDEngine is designed to be fast, but as a developer, you should understand how it stays fast to avoid "fighting" the engine.
 

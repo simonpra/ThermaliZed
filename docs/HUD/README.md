@@ -9,22 +9,27 @@ Welcome to the in-depth guide for the ThermaliZed HUD Engine. This series of tut
     *   The Layer system and Mental Model.
     *   Package structure.
 
-2.  **[Drawing Basics](02-drawing-basics.md)**
+2.  **[Plugin Setup](02-plugin-setup.md)**
+    *   Subscribing to `HUD_DRAW`.
+    *   Lazy initialization of the engine.
+    *   Standard callback structure and boilerplate.
+
+3.  **[Drawing Basics](03-drawing-basics.md)**
     *   Primitives vs. Composites.
     *   Canvas Coordinates vs. Sensor Coordinates.
     *   Drawing your first crosshair and smart label.
 
-3.  **[Layers and Clearing](03-layers-and-clearing.md)**
+4.  **[Layers and Clearing](04-layers-and-clearing.md)**
     *   Managing Z-order.
     *   Selective clearing for complex interfaces.
     *   The lifecycle of a single frame.
 
-4.  **[Interaction with TickEngine](04-interaction-with-tickengine.md)**
+5.  **[Interaction with TickEngine](05-interaction-with-tickengine.md)**
     *   Handling 30 FPS mouse hover/selection.
     *   The "Dirty" pattern for performance.
     *   Mapping mouse clicks to sensor pixels.
 
-5.  **[Performance and Best Practices](05-performance-and-best-practices.md)**
+6.  **[Performance and Best Practices](06-performance-and-best-practices.md)**
     *   How memoization and PIL caching work.
     *   Common pitfalls and how to avoid them.
     *   Developer checklist.

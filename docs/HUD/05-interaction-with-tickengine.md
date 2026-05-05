@@ -1,4 +1,4 @@
-# HUD Engine — Part 4: Interaction with TickEngine
+# HUD Engine — Part 5: Interaction with TickEngine
 
 If you want a HUD element to follow the mouse (like a hover-tip) or animate, doing it inside the `HUD_DRAW` callback isn't enough. `HUD_DRAW` only fires when the camera provides a new frame. If the camera is slow (9Hz) or frozen, your hover will feel laggy.
 
@@ -76,4 +76,4 @@ def on_unload(self, context):
 
 ## Next Steps
 
-In [Part 5: Performance and Best Practices](05-performance-and-best-practices.md), we'll look at how to ensure your HUD stays buttery smooth even with hundreds of items.
+In [Part 6: Performance and Best Practices](06-performance-and-best-practices.md), we'll look at how to ensure your HUD stays buttery smooth even with hundreds of items.

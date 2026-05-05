@@ -51,4 +51,4 @@ The engine is located in `src/utils/hud/`.
 
 ## Next Steps
 
-In [Part 2: Drawing Basics](02-drawing-basics.md), we will learn how to actually put pixels on the screen using these concepts.
+In [Part 2: Plugin Setup](02-plugin-setup.md), we will learn how to integrate the engine into a plugin.

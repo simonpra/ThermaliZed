@@ -1,4 +1,4 @@
-# HUD Engine — Part 2: Drawing Basics
+# HUD Engine — Part 3: Drawing Basics
 
 Drawing on the HUD is divided into two categories: **Primitives** (simple shapes) and **Composites** (complex widgets made of multiple shapes).
 
@@ -67,4 +67,4 @@ Most drawing functions accept `fill_rgba` which can be:
 
 ## Next Steps
 
-In [Part 3: Layers and Clearing](03-layers-and-clearing.md), we'll see how to manage multiple overlays without them clobbering each other.
+In [Part 4: Layers and Clearing](04-layers-and-clearing.md), we'll see how to manage multiple overlays without them clobbering each other.
