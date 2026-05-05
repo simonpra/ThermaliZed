@@ -8,7 +8,7 @@ The **HUDEngine** is a high-performance, layer-aware drawing system designed spe
 
 The HUDEngine gives access to the canvas and HUD layers in the 'main_content' Zone :
 
-![UI Zones](./assets/ui-zones.svg)
+![UI Zones](../assets/ui-zones.svg)
 
 ---
 
@@ -16,7 +16,7 @@ The HUDEngine gives access to the canvas and HUD layers in the 'main_content' Zo
 
 When using the HUDEngine, you should think in terms of **Layers** and **Sensor Space**.
 
-![HUD Engine Conceptual Architecture](./assets/layers-stack.svg)
+![HUD Engine Conceptual Architecture](../assets/layers-stack.svg)
 
 ### 1. Layers (The "Z" Axis)
 
@@ -32,7 +32,7 @@ Canvas items are organized into a stack. Higher layer numbers are drawn on top o
 
 The `CoordMapper` acts as the bridge between the raw camera data and the visual window.
 
-![CoordMapper](./assets/coord-mapper.svg)
+![CoordMapper](../assets/coord-mapper.svg)
 
 - **Canvas Space**: Standard pixels on your screen. `(0,0)` is the top-left of the canvas widget.
 - **Sensor Space**: The "thermal" pixels. `(0,0)` is the top-left of the camera sensor.

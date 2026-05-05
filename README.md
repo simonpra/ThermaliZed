@@ -8,6 +8,8 @@
 
 ThermaliZed is a developer-first tool designed for researchers, engineers, and R&D teams working with thermal imaging systems. It enables interactive exploration, manipulation, and extension of 16-bit thermal data pipelines from both live cameras and recorded datasets.
 
+![thermaliZed logo](thermalized.png)
+
 ![Python Version](https://img.shields.io/badge/python-3.11+-blue.svg)
 
 ## What is it for?
@@ -30,7 +32,7 @@ ThermaliZed includes an event-driven plugin architecture that allows you to:
 - extend the UI with new sidebar controls or visualizations
 - create reusable thermal data pipelines
 
-👉 See [PLUGIN.md](PLUGIN.md) for the complete guide
+👉 See [dev/PLUGIN.md](./dev/PLUGIN.md) for the complete guide
 
 👉 Example reference plugins in [`plugins/`](plugins/):
 
@@ -91,17 +93,9 @@ And can as well load:
 
 Installation process and all development resources live in [dev/README.md](dev/README.md)
 
+Plugin dev guide: [dev/PLUGIN.md](dev/PLUGIN.md)
+
 HUD Engine internals and plugin drawing API: [docs/HUD_ENGINE.md](docs/HUD_ENGINE.md)
-
-## Standalone Bundle
-
-![thermaliZed logo](thermalized.png)
-
-You can download the latest pre-compiled application bundle directly from the `dist` folder.
-
-The app is packaged into a standalone executable using PyInstaller and the provided `ThermaliZed.spec` configuration file.
-
-> **Note:** This software is provided _"as is"_ without any guarantees of compatibility for your specific hardware or operating system configuration. It has been primarily developed and tested on a MacBook Air (M3) running macOS 15.7.
 
 ## Examples
 
