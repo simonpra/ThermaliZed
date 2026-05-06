@@ -39,7 +39,10 @@ class PluginClass(SystemComponent):
         context.event_bus.subscribe("HUD_DRAW", self._on_hud_draw)
 
     def on_unload(self, context):
+        if context is not None and getattr(context, "event_bus", None) is not None:
+            context.event_bus.unsubscribe("HUD_DRAW", self._on_hud_draw)
         self._unbind_canvas()
+        self.context = None
 
     # ------------------------------------------------------------------
     # Canvas binding helpers
