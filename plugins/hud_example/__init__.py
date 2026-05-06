@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import tkinter as tk
-from typing import Optional, Tuple
+from typing import Optional
 
 from src.core.plugin_base import SystemComponent
-from src.utils.hud import HUDEngine, TickEngine, LAYER_INTERACTION, LAYER_MAIN
-from src.utils.functions import to_degrees_c
+from src.utils.hud import HUDEngine, LAYER_MAIN
 
 class PluginClass(SystemComponent):
     """
