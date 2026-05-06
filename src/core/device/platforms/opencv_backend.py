@@ -1,3 +1,9 @@
+import os
+import sys
+
+# Suppress OpenCV warnings (must be set before cv2 import)
+os.environ.setdefault('OPENCV_LOG_LEVEL', 'FATAL')
+
 import cv2
 import threading
 import time
@@ -33,10 +39,13 @@ class OpenCVDeviceBackend(BaseDeviceBackend):
         """
         self.devices = []
         self.device_indices = []
+        
+        backend = cv2.CAP_MSMF if sys.platform == 'win32' else cv2.CAP_ANY
+
         # Basic scanning up to 5 devices to check if they can be opened.
         # This is a stub/basic implementation.
         for i in range(5):
-            cap = cv2.VideoCapture(i)
+            cap = cv2.VideoCapture(i, backend)
             if cap.isOpened():
                 self.devices.append(f"OpenCV Camera {i}")
                 self.device_indices.append(i)
@@ -61,11 +70,13 @@ class OpenCVDeviceBackend(BaseDeviceBackend):
     def _capture_loop(self, device_index: int):
         real_index = self.device_indices[device_index] if hasattr(self, 'device_indices') and device_index < len(self.device_indices) else device_index
         # Stub loop logic
-        cap = cv2.VideoCapture(real_index)
+        backend = cv2.CAP_MSMF if sys.platform == 'win32' else cv2.CAP_ANY
+        cap = cv2.VideoCapture(real_index, backend)
         
         # Try to set resolution (TC001 is 256x384 standard format is NV12 or YUY2 but wrapped)
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, 256)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 384)
+        cap.set(cv2.CAP_PROP_CONVERT_RGB, 0)
         
         try:
             while self.session_active and cap.isOpened():

@@ -25,19 +25,28 @@ Ensure you have Python 3.11+ installed. The `ttk` version 9+ is required for the
 2. Install the required dependencies:
 
    **On macOS:**
+<<<<<<< starting-docs
 
+=======
+>>>>>>> main
    ```bash
    pip install -r requirements-mac.txt
    ```
 
    **On Windows:**
+<<<<<<< starting-docs
 
+=======
+>>>>>>> main
    ```bash
    pip install -r requirements-win.txt
    ```
 
    **Core only (headless/other):**
+<<<<<<< starting-docs
 
+=======
+>>>>>>> main
    ```bash
    pip install -r requirements.txt
    ```
