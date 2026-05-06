@@ -95,4 +95,4 @@ class PluginClass(SystemComponent):
 ```
 
 > [!TIP]
-> For a full list of standard events broadcasted by the core, see the [Plugin Guide](../dev/PLUGIN.md).
+> For a full list of standard events broadcasted by the core, see the [Plugin Guide](./PLUGIN.md).

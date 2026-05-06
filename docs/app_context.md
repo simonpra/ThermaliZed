@@ -13,13 +13,13 @@ The `AppContext` is the central brain of ThermaliZed. It serves as the single so
 
 ## Key Attributes
 
-| Attribute | Type | Description |
-| :--- | :--- | :--- |
-| `event_bus` | `EventBus` | The primary hub for publishing and subscribing to system events. |
-| `state` | `dict` | A dictionary containing globally shared data (params, device lists, metadata). |
-| `services` | `dict` | A registry of global singleton services (e.g., the camera manager). |
-| `plugins` | `list` | A list of all instantiated and active `PluginClass` objects. |
-| `root` | `tk.Tk` | Reference to the main Tkinter root window. |
+| Attribute   | Type       | Description                                                                    |
+| :---------- | :--------- | :----------------------------------------------------------------------------- |
+| `event_bus` | `EventBus` | The primary hub for publishing and subscribing to system events.               |
+| `state`     | `dict`     | A dictionary containing globally shared data (params, device lists, metadata). |
+| `services`  | `dict`     | A registry of global singleton services (e.g., the camera manager).            |
+| `plugins`   | `list`     | A list of all instantiated and active `PluginClass` objects.                   |
+| `root`      | `tk.Tk`    | Reference to the main Tkinter root window.                                     |
 
 ---
 
@@ -29,11 +29,11 @@ The `state` dictionary is where the application stores its "now" information. Pl
 
 ### Standard State Keys
 
-| Key | Type | Purpose |
-| :--- | :--- | :--- |
-| `'params'` | `dict` | Current processing parameters (e.g., colormap, contrast, gamma). |
-| `'devices'` | `list[str]` | List of discovered thermal camera names. |
-| `'infos'` | `dict` | Real-time frame statistics (Min/Max/Center temperatures). |
+| Key                   | Type           | Purpose                                                               |
+| :-------------------- | :------------- | :-------------------------------------------------------------------- |
+| `'params'`            | `dict`         | Current processing parameters (e.g., colormap, contrast, gamma).      |
+| `'devices'`           | `list[str]`    | List of discovered thermal camera names.                              |
+| `'infos'`             | `dict`         | Real-time frame statistics (Min/Max/Center temperatures).             |
 | `'frozen_frame_data'` | `dict \| None` | If set, the app bypasses the live camera to display this static data. |
 
 > [!IMPORTANT]
@@ -46,12 +46,15 @@ The `state` dictionary is where the application stores its "now" information. Pl
 Services are global objects that provide specialized functionality. The most common service is the `camera`.
 
 ### `register_service(name, service)`
+
 Registers a global service instance. This is typically called during system initialization.
 
 ### `get_service(name)`
-Retrieves a service by its registered name. 
+
+Retrieves a service by its registered name.
 
 **Example: Accessing the Camera Service**
+
 ```python
 camera = context.get_service('camera')
 latest_raw = camera.get_latest_frame()
@@ -77,11 +80,14 @@ The `AppContext` runs a recurring loop (via `root.after`) at approximately **30 
 The context uses Python reflection (`pkgutil` and `importlib`) to find plugins.
 
 ### Discovery Logic
+
 - **Core Components**: Loaded from `src/core/components`.
 - **External Plugins**: Loaded from the `plugins/` directory in the project root.
 
 ### Lifecycle Hooks
+
 When a module containing a `PluginClass` is discovered, the context:
+
 1.  **Instantiates** the class.
 2.  **Calls `on_load(self)`**, passing itself as the `context`.
 3.  **Appends** the instance to `self.plugins`.
@@ -90,4 +96,4 @@ When a module containing a `PluginClass` is discovered, the context:
 ---
 
 > [!TIP]
-> For more information on how to interact with the context from a plugin, see the [Plugin Guide](../dev/PLUGIN.md).
+> For more information on how to interact with the context from a plugin, see the [Plugin Guide](./PLUGIN.md).

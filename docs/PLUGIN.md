@@ -171,7 +171,7 @@ def _on_hud_draw(self, hud_context):
 ```
 
 > [!IMPORTANT]
-> To go more in depth with the HUD engine please read the [HUD Engine](../docs/HUD_ENGINE.md) documentation and the specific tutorial in [./docs/HUD/README.md](../docs/HUD/README.md).
+> To go more in depth with the HUD engine please read the [HUD Engine](./HUD_ENGINE.md) documentation and the specific tutorial in [./HUD/README.md](./HUD/README.md).
 
 ---
 
@@ -235,11 +235,11 @@ class PluginClass(SystemComponent):
 
 The `context.state` object is a shared dictionary containing the application's configuration and real-time metadata.
 
-| Key | Description |
-| :--- | :--- |
-| `params` | A dictionary of active processing parameters (e.g., `alpha`, `gamma`, `colormap`). |
-| `infos` | Real-time frame statistics (e.g., `min_c`, `max_c`, `avg_c`, current `fps`). |
-| `frozen_frame_data` | Contains static frame data if the app is in "Frozen" or "File" mode. |
+| Key                 | Description                                                                        |
+| :------------------ | :--------------------------------------------------------------------------------- |
+| `params`            | A dictionary of active processing parameters (e.g., `alpha`, `gamma`, `colormap`). |
+| `infos`             | Real-time frame statistics (e.g., `min_c`, `max_c`, `avg_c`, current `fps`).       |
+| `frozen_frame_data` | Contains static frame data if the app is in "Frozen" or "File" mode.               |
 
 > [!TIP]
 > Changes made to `context.state['params']` are immediately reflected in the next frame processed by the pipeline.
@@ -251,23 +251,25 @@ The `context.state` object is a shared dictionary containing the application's c
 To maintain a consistent aesthetic, plugins providing sidebar controls should inherit from **`BaseControlFrame`** (`src.core.components.controls.base`).
 
 ### `BaseControlFrame` Helpers
+
 This class provides pre-styled methods for common layout needs:
 
-*   `add_section_header(row, text)`: Adds a bolded section separator.
-*   `add_label_slider(row, label, variable, from_, to, res, command)`: A standard slider with an integrated value label.
-*   `add_dropdown(row, label, variable, values, command)`: A themed selection menu.
+- `add_section_header(row, text)`: Adds a bolded section separator.
+- `add_label_slider(row, label, variable, from_, to, res, command)`: A standard slider with an integrated value label.
+- `add_dropdown(row, label, variable, values, command)`: A themed selection menu.
 
 ### Example: Sidebar UI
+
 ```python
 from src.core.components.controls.base import BaseControlFrame
 
 class MyPluginUI(BaseControlFrame):
     def __init__(self, parent, context, **kwargs):
         super().__init__(parent, context=context, **kwargs)
-        
+
         # Link a UI variable to global state
         self.val = tk.DoubleVar(value=self.params.get('my_val', 1.0))
-        
+
         self.add_section_header(0, "MY CUSTOM CONTROLS")
         self.add_label_slider(1, "Level:", self.val, 0.0, 5.0, 0.1, self._on_change)
 
@@ -279,9 +281,9 @@ class MyPluginUI(BaseControlFrame):
 
 ## Useful Utilities
 
-| Import Path | Purpose |
-| :--- | :--- |
-| `src.utils.functions.to_degrees_c(raw)` | Converts a TC001 uint16 raw value to Celsius (°C). |
-| `src.utils.functions.to_raw(celsius)` | Converts a Celsius value back to a TC001 uint16 raw value. |
-| `src.utils.constants.COLORMAPS` | A list of available OpenCV colormaps `(code, name)`. |
-| `src.utils.constants.DEFAULT_PARAMS` | The default processing parameters for the application. |
+| Import Path                             | Purpose                                                    |
+| :-------------------------------------- | :--------------------------------------------------------- |
+| `src.utils.functions.to_degrees_c(raw)` | Converts a TC001 uint16 raw value to Celsius (°C).         |
+| `src.utils.functions.to_raw(celsius)`   | Converts a Celsius value back to a TC001 uint16 raw value. |
+| `src.utils.constants.COLORMAPS`         | A list of available OpenCV colormaps `(code, name)`.       |
+| `src.utils.constants.DEFAULT_PARAMS`    | The default processing parameters for the application.     |

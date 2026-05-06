@@ -32,7 +32,7 @@ ThermaliZed includes an event-driven plugin architecture that allows you to:
 - extend the UI with new sidebar controls or visualizations
 - create reusable thermal data pipelines
 
-👉 See [dev/PLUGIN.md](./dev/PLUGIN.md) for the complete guide
+👉 See [docs/PLUGINS.md](./docs/PLUGIN.md) for a high-level overview
 
 👉 Example reference plugins in [`plugins/`](plugins/):
 
@@ -93,7 +93,7 @@ And can as well load:
 
 Installation process and all development resources live in [dev/README.md](dev/README.md)
 
-Plugin dev guide: [dev/PLUGIN.md](dev/PLUGIN.md)
+Plugin dev guide: [docs/PLUGIN.md](docs/PLUGIN.md)
 
 HUD Engine internals and plugin drawing API: [docs/HUD_ENGINE.md](docs/HUD_ENGINE.md)
 

@@ -4,6 +4,12 @@ Welcome to the ThermaliZed developer documentation. This directory contains in-d
 
 ---
 
+## Plugin Development
+
+- **[Plugin Developer Guide](./PLUGIN.md)**: The "Quickstart" guide. Start here if you want to start quickly.
+
+---
+
 ## Core Architecture
 
 Understanding the "Micro-Core" architecture is essential for building robust plugins.
@@ -31,9 +37,3 @@ A step-by-step guide to building advanced interactive thermal overlays.
 4.  **[Layers & Clearing](HUD/04-layers-and-clearing.md)**: Managing visual depth and Z-ordering.
 5.  **[Async Interaction](HUD/05-interaction-with-tickengine.md)**: Using the `TickEngine` for fluid mouse-hover effects.
 6.  **[Performance & Best Practices](HUD/06-performance-and-best-practices.md)**: Optimizing your HUD for real-time 30 FPS use.
-
----
-
-## 🛠️ Plugin Development
-
-- **[Plugin Developer Guide](../dev/PLUGIN.md)**: The "Quickstart" guide found in the `dev/` folder. Start here if you are new to the project.
