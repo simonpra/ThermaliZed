@@ -31,7 +31,6 @@ def process_thermal_frame(raw_flat_buffer, width, height, stride, params, event_
                A non-None return replaces `data` for downstream steps.
 
             2. 'IMAGE_PIPELINE' — fired after the final 8-bit BGR heatmap is scaled.
-               (Alias for the legacy 'PROCESSED_FRAME_PIPELINE')
                Subscribers receive:
                  data : np.ndarray[uint8, BGR] — current mutable 8-bit frame
                  raw  : dict with keys:
@@ -69,7 +68,10 @@ def process_thermal_frame(raw_flat_buffer, width, height, stride, params, event_
              return None, {}, {}
 
         # The thermal frame is usually packed with regular image data.
-        # We expect the thermal data to be in the lower half of the buffer.
+        # The fisrt half is the visual feed. It contains a standard 8-bit/pixel (or YUYV mapped)
+        # auto-scaled grayscale image. The camera generates this top half so it can function
+        # as a plug-and-play webcam recognized as a USB Video Class (UVC) device by the OS.
+        # The bottom half contains the raw 16-bit per pixel data from the sensor.
         thermal_h = height // 2 # e.g., 192 for the TC001
         thermal_w = width       # e.g., 256 for the TC001
 
@@ -186,15 +188,9 @@ def process_thermal_frame(raw_flat_buffer, width, height, stride, params, event_
                 '16bit': original_raw_16bit,
                 'thermal_info': thermal_info.copy(),
             }
-            # Call new standard pipeline name
+            # IMAGE_PIPELINE - Plugins can modify the final output image.
             heatmap_scaled = event_bus.pipeline(
                 'IMAGE_PIPELINE',
-                heatmap_scaled,
-                raw=raw_payload,
-            )
-            # Call legacy pipeline name for backward compatibility
-            heatmap_scaled = event_bus.pipeline(
-                'PROCESSED_FRAME_PIPELINE',
                 heatmap_scaled,
                 raw=raw_payload,
             )
