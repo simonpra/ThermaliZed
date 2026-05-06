@@ -21,22 +21,36 @@ Ensure you have Python 3.11+ installed. The `ttk` version 9+ is required for the
    source .venv/bin/activate
    pip install --upgrade pip
    ```
+
 2. Install the required dependencies:
 
    **On macOS:**
+<<<<<<< starting-docs
+
+=======
+>>>>>>> main
    ```bash
    pip install -r requirements-mac.txt
    ```
 
    **On Windows:**
+<<<<<<< starting-docs
+
+=======
+>>>>>>> main
    ```bash
    pip install -r requirements-win.txt
    ```
 
    **Core only (headless/other):**
+<<<<<<< starting-docs
+
+=======
+>>>>>>> main
    ```bash
    pip install -r requirements.txt
    ```
+
 3. Connect your thermal camera via USB. (optional, you can also load [raw file](thermal_pictures/tc001_snapshot.npz) )
 4. Run the application:
    ```bash
@@ -44,7 +58,9 @@ Ensure you have Python 3.11+ installed. The `ttk` version 9+ is required for the
    ```
 
 ## Troubleshoot
-### ModuleNotFoundError: No module named '_tkinter'
+
+### ModuleNotFoundError: No module named '\_tkinter'
+
 It means your version of Python is not configured to use Tkinter.
 
 Install tkinter with `brew install python-tk`
@@ -53,8 +69,8 @@ Note : if you use PyEnv, you need to first uninstall your local Python version, 
 
 ## Developer Documentation
 
-[PLUGIN.md](PLUGIN.md) will give you a good overview of the plugin and modular system.
+[docs/PLUGIN.md](../docs/PLUGIN.md) will give you a good overview of the plugin and modular system.
 
-[image_enhancement PLUGIN](plugins/image_enhancement/__init__.py) as a full exemple of a data-stream-manipulation plugin.
+[image_enhancement PLUGIN](../plugins/image_enhancement/__init__.py) as a full exemple of a data-stream-manipulation plugin.
 
 [SKILLS.md](SKILLS.md) can be used to ask AI agents to directly build your desired plugin.

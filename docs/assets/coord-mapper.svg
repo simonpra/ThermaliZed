@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 1100 448.74535">
+  <!-- Generator: Adobe Illustrator 30.3.0, SVG Export Plug-In . SVG Version: 2.1.3 Build 182)  -->
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="150%" height="150%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12"/>
+      <feOffset dx="0" dy="10" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA slope="0.15" type="linear"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="shadow1" data-name="shadow" x="-20%" y="-20%" width="150%" height="150%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12"/>
+      <feOffset dx="0" dy="10" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA slope="0.15" type="linear"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <g>
+    <g filter="url(#shadow)">
+      <rect x="46.55566" y="28.4" width="300" height="380" rx="16" ry="16" fill="#fff"/>
+      <rect x="46.55566" y="28.4" width="300" height="380" rx="16" ry="16" fill="none" stroke="#e2e8f0"/>
+    </g>
+    <circle cx="66.55566" cy="48.4" r="5" fill="#f87171"/>
+    <circle cx="82.55566" cy="48.4" r="5" fill="#facc15"/>
+    <circle cx="98.55566" cy="48.4" r="5" fill="#4ade80"/>
+    <text transform="translate(120.51758 52.39999)" fill="#64748b" font-family="Helvetica-Bold, Helvetica" font-size="10" font-weight="700" isolation="isolate" letter-spacing=".05em"><tspan x="0" y="0">SENSOR SPACE (RAW DATA)</tspan></text>
+    <line x1="46.55566" y1="68.4" x2="346.55566" y2="68.4" fill="none" stroke="#f1f5f9"/>
+    <rect x="66.55566" y="88.4" width="260" height="260" rx="8" ry="8" fill="#f8fafc" stroke="#f1f5f9"/>
+    <text transform="translate(71.55566 103.39999)" fill="#94a3b8" font-family="Helvetica, Helvetica" font-size="10" isolation="isolate"><tspan x="0" y="0">(0, 0)</tspan></text>
+    <g>
+      <rect x="86.55566" y="108.4" width="220" height="220" fill-opacity="0"/>
+      <rect x="86.55566" y="108.4" width="220" height="220" rx="4" ry="4" fill="#312e81"/>
+      <rect x="196.55566" y="218.4" width="110" height="110" rx="4" ry="4" fill="#7c3aed" isolation="isolate" opacity=".6"/>
+      <rect x="246.55566" y="268.4" width="60" height="60" rx="4" ry="4" fill="#f59e0b" isolation="isolate" opacity=".8"/>
+      <rect x="276.55566" y="298.4" width="30" height="30" rx="4" ry="4" fill="#fde047"/>
+      <path d="M86.55566,126.69999h220M86.55566,144.99999h220M86.55566,163.3h220M86.55566,181.59999h220M86.55566,199.9h220M86.55566,218.2h220M86.55566,236.5h220M86.55566,254.79999h220M86.55566,273.09999h220M86.55566,291.4h220M86.55566,309.7h220" fill="none" isolation="isolate" opacity=".2" stroke="#fff" stroke-width=".5"/>
+      <path d="M104.85566,108.4v220M123.15566,108.4v220M141.45567,108.4v220M159.75566,108.4v220M178.05566,108.4v220M196.35567,108.4v220M214.65567,108.4v220M232.95566,108.4v220M251.25566,108.4v220M269.55566,108.4v220M287.85567,108.4v220" fill="none" isolation="isolate" opacity=".2" stroke="#fff" stroke-width=".5"/>
+    </g>
+    <g>
+      <rect x="156.55566" y="183.4" width="80" height="22" rx="4" ry="4" fill-opacity=".9"/>
+      <text transform="translate(166.26025 198.39999)" fill="#fff" font-family="Helvetica-Bold, Helvetica" font-size="10" font-weight="700" isolation="isolate"><tspan x="0" y="0">Pixel (sx, sy)</tspan></text>
+      <rect x="186.55566" y="208.4" width="20" height="20" fill="none" stroke="#22d3ee" stroke-width="2"/>
+      <line x1="196.55566" y1="228.4" x2="196.55566" y2="248.4" fill="none" stroke="#fff" stroke-width="2"/>
+    </g>
+    <text transform="translate(281.53125 338.39999)" fill="#94a3b8" font-family="Helvetica, Helvetica" font-size="10" isolation="isolate"><tspan x="0" y="0">(128, 96)</tspan></text>
+    <text transform="translate(66.55566 383.39999)" fill="#94a3b8" font-family="Helvetica-Oblique, Helvetica" font-size="11" font-style="oblique" isolation="isolate"><tspan x="0" y="0">Processed thermal grid (12 x 12)</tspan></text>
+  </g>
+  <g>
+    <rect x="410" y="28.2" width="280" height="380" rx="20" ry="20" fill="none" stroke="#e6e6e6"/>
+    <text transform="translate(430 63.20001)" fill="#334155" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="700" isolation="isolate"><tspan x="0" y="0">CoordMapper</tspan></text>
+    <rect x="415.77855" y="88.2" width="268.4429" height="180.2" rx="12" ry="12" fill="#fafafa"/>
+    <g>
+      <text transform="translate(426.44105 118.20001)" fill="#878787" font-family="FiraSans-Regular, &apos;Fira Sans&apos;" font-size="12" isolation="isolate"><tspan x="0" y="0">set_sensor_mapping(</tspan></text>
+      <text transform="translate(542.70753 118.20001)" fill="#878787" font-family="FiraSans-Regular, &apos;Fira Sans&apos;" font-size="12" isolation="isolate"><tspan x="0" y="0">bbox</tspan></text>
+      <text transform="translate(569.55135 118.20001)" fill="#878787" font-family="FiraSans-Regular, &apos;Fira Sans&apos;" font-size="12"><tspan x="0" y="0">, </tspan></text>
+      <text transform="translate(575.61122 118.20001)" fill="#878787" font-family="FiraSans-Regular, &apos;Fira Sans&apos;" font-size="12" isolation="isolate"><tspan x="0" y="0">shape</tspan></text>
+      <text transform="translate(608.50282 118.20001)" fill="#878787" font-family="FiraSans-Regular, &apos;Fira Sans&apos;" font-size="12"><tspan x="0" y="0">)</tspan></text>
+    </g>
+    <g isolation="isolate">
+      <text transform="translate(426.44105 147.31524)" fill="#878787" font-family="Helvetica-Oblique, Helvetica" font-size="11" font-style="oblique"><tspan x="0" y="0">Map the 2D pixels array of the sensor onto the </tspan><tspan x="0" y="13.2002">Canvas Space actualy displayed on the screen.</tspan><tspan x="0" y="26.39941">Given method to draw UI on Canvas according to </tspan><tspan x="0" y="39.59961">a specific pixel/data point.</tspan><tspan x="0" y="66" xml:space="preserve"> -  draw_sensor_crosshair(sx, sy, color)</tspan><tspan x="0" y="79.2002" xml:space="preserve"> - draw_sensor_pixel_rect(sx, sy, color, width)</tspan><tspan x="0" y="92.39941" xml:space="preserve"> - draw_sensor_smart_text(</tspan><tspan x="0" y="105.59961" letter-spacing="2.9949em">	</tspan><tspan x="36" y="105.59961">sx, sy, text, color, bg_color )</tspan></text>
+    </g>
+    <g>
+      <path d="M417.84622,314.33131h40.0923M437.89237,297.62618v33.41025M427.8693,307.64926l20.04615,13.3641M427.8693,321.01336l20.04615-13.3641" fill="none" stroke="#94a3b8"/>
+      <g isolation="isolate">
+        <text transform="translate(466.64246 307.62619)" fill="#475569" font-family="Helvetica, Helvetica" font-size="13" isolation="isolate"><tspan x="0" y="0">Maps sensor coordinates (sx, sy) </tspan><tspan x="0" y="15.60059">to canvas coordinates (cx, cy).</tspan></text>
+        <text transform="translate(651.27478 307.62619)" fill="#475569" font-family="Helvetica, Helvetica" font-size="13"><tspan x="0" y="0"> </tspan></text>
+      </g>
+    </g>
+    <g>
+      <g>
+        <rect x="421.61767" y="357.18217" width="31.34256" height="31.34256" rx="2" ry="2" fill="none" stroke="#94a3b8" stroke-width="2"/>
+        <path d="M426.84143,362.40593l7.83564,7.83564M447.73647,362.40593l-7.83564,7.83564M426.84143,383.30097l7.83564-7.83564M447.73647,383.30097l-7.83564-7.83564" fill="none" stroke="#94a3b8" stroke-width="2"/>
+      </g>
+      <g isolation="isolate">
+        <text transform="translate(466.64265 361.55258)" fill="#475569" font-family="Helvetica, Helvetica" font-size="13" isolation="isolate"><tspan x="0" y="0">Supports zoom, pan, and aspect </tspan><tspan x="0" y="15.60059">adjustments while preserving </tspan><tspan x="0" y="31.2002">alignment.</tspan></text>
+        <text transform="translate(632.99373 367.62619)" fill="#475569" font-family="Helvetica, Helvetica" font-size="13"><tspan x="0" y="0"> </tspan></text>
+      </g>
+    </g>
+  </g>
+  <g>
+    <g filter="url(#shadow1)">
+      <rect x="771.5332" y="28.4" width="300" height="380" rx="16" ry="16" fill="#fff"/>
+      <rect x="771.5332" y="28.4" width="300" height="380" rx="16" ry="16" fill="none" stroke="#e2e8f0"/>
+    </g>
+    <circle cx="791.5332" cy="48.4" r="5" fill="#f87171"/>
+    <circle cx="807.5332" cy="48.4" r="5" fill="#facc15"/>
+    <circle cx="823.5332" cy="48.4" r="5" fill="#4ade80"/>
+    <text transform="translate(839.35547 52.39999)" fill="#64748b" font-family="Helvetica-Bold, Helvetica" font-size="10" font-weight="700" isolation="isolate" letter-spacing=".05em"><tspan x="0" y="0">CANVAS SPACE (GUI WINDOW)</tspan></text>
+    <line x1="771.5332" y1="68.4" x2="1071.5332" y2="68.4" fill="none" stroke="#f1f5f9"/>
+    <rect x="791.5332" y="88.4" width="260" height="260" rx="8" ry="8" fill="#f8fafc" stroke="#f1f5f9"/>
+    <g opacity=".3">
+      <rect x="811.5332" y="108.4" width="220" height="220" rx="4" ry="4" fill="#312e81"/>
+      <rect x="921.5332" y="218.4" width="110" height="110" rx="4" ry="4" fill="#7c3aed" isolation="isolate" opacity=".6"/>
+      <rect x="971.5332" y="268.4" width="60" height="60" rx="4" ry="4" fill="#f59e0b" isolation="isolate" opacity=".8"/>
+      <rect x="1001.5332" y="298.4" width="30" height="30" rx="4" ry="4" fill="#fde047"/>
+    </g>
+    <g>
+      <rect x="861.5332" y="183.4" width="120" height="22" rx="4" ry="4"/>
+      <text transform="translate(872.34863 198.39999)" fill="#fff" font-family="Helvetica-Bold, Helvetica" font-size="10" font-weight="700" isolation="isolate"><tspan x="0" y="0">Screen Point (cx, cy)</tspan></text>
+      <circle cx="921.5332" cy="218.4" r="12" fill="#fff"/>
+      <circle cx="921.5332" cy="218.4" r="8" fill="#22d3ee" stroke="#22d3ee" stroke-opacity=".3" stroke-width="4"/>
+      <circle cx="921.5332" cy="218.4" r="3" fill="#fff"/>
+      <line x1="921.5332" y1="230.4" x2="921.5332" y2="253.4" fill="none" stroke="#fff" stroke-width="2"/>
+    </g>
+    <text transform="translate(796.5332 103.39999)" fill="#94a3b8" font-family="Helvetica, Helvetica" font-size="10" isolation="isolate"><tspan x="0" y="0">(0, 0)</tspan></text>
+    <text transform="translate(1018.20312 338.39999)" fill="#94a3b8" font-family="Helvetica, Helvetica" font-size="10" isolation="isolate"><tspan x="0" y="0">(W, H)</tspan></text>
+    <g isolation="isolate">
+      <text transform="translate(791.5332 383.39999)" fill="#94a3b8" font-family="Helvetica, Helvetica" font-size="11" isolation="isolate"><tspan x="0" y="0">Resizable canvas widget —</tspan></text>
+      <text transform="translate(926.65381 383.39999)" fill="#94a3b8" font-family="Helvetica, Helvetica" font-size="11"><tspan x="0" y="0"> </tspan></text>
+      <text transform="translate(791.5332 397.39999)" fill="#94a3b8" font-family="Helvetica, Helvetica" font-size="11" isolation="isolate"><tspan x="0" y="0">coordinates adapt to window size</tspan></text>
+    </g>
+  </g>
+  <path d="M355.77783,218.4h35" fill="none" stroke="#475569" stroke-linecap="round" stroke-width="2"/>
+  <path d="M386.59837,213.4l6,5-6,5" fill="none" stroke="#475569" stroke-width="2"/>
+  <path d="M716.84498,218.4h40" fill="none" stroke="#475569" stroke-linecap="round" stroke-width="2"/>
+  <path d="M751.84498,213.4l6,5-6,5" fill="none" stroke="#475569" stroke-width="2"/>
+  <metadata><?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 10.0-c000 1.000000, 0000/00/00-00:00:00        ">
+   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about=""
+            xmlns:xmp="http://ns.adobe.com/xap/1.0/"
+            xmlns:xmpGImg="http://ns.adobe.com/xap/1.0/g/img/"
+            xmlns:xmpTPg="http://ns.adobe.com/xap/1.0/t/pg/"
+            xmlns:stDim="http://ns.adobe.com/xap/1.0/sType/Dimensions#"
+            xmlns:stFnt="http://ns.adobe.com/xap/1.0/sType/Font#"
+            xmlns:xmpG="http://ns.adobe.com/xap/1.0/g/"
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
+            xmlns:stEvt="http://ns.adobe.com/xap/1.0/sType/ResourceEvent#">
+         <xmp:CreatorTool>Adobe Illustrator 30.3 (Macintosh)</xmp:CreatorTool>
+         <xmp:CreateDate>2026-05-04T11:41:16+02:00</xmp:CreateDate>
+         <xmp:Thumbnails>
+            <rdf:Alt>
+               <rdf:li rdf:parseType="Resource">
+                  <xmpGImg:width>256</xmpGImg:width>
+                  <xmpGImg:height>124</xmpGImg:height>
+                  <xmpGImg:format>JPEG</xmpGImg:format>
+                  <xmpGImg:image>/9j/4AAQSkZJRgABAgEAAAAAAAD/7QAsUGhvdG9zaG9wIDMuMAA4QklNA+0AAAAAABAAAAAAAAEA&#xA;AQAAAAAAAQAB/+4ADkFkb2JlAGTAAAAAAf/bAIQABgQEBAUEBgUFBgkGBQYJCwgGBggLDAoKCwoK&#xA;DBAMDAwMDAwQDA4PEA8ODBMTFBQTExwbGxscHx8fHx8fHx8fHwEHBwcNDA0YEBAYGhURFRofHx8f&#xA;Hx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8f/8AAEQgAfAEAAwER&#xA;AAIRAQMRAf/EAaIAAAAHAQEBAQEAAAAAAAAAAAQFAwIGAQAHCAkKCwEAAgIDAQEBAQEAAAAAAAAA&#xA;AQACAwQFBgcICQoLEAACAQMDAgQCBgcDBAIGAnMBAgMRBAAFIRIxQVEGE2EicYEUMpGhBxWxQiPB&#xA;UtHhMxZi8CRygvElQzRTkqKyY3PCNUQnk6OzNhdUZHTD0uIIJoMJChgZhJRFRqS0VtNVKBry4/PE&#xA;1OT0ZXWFlaW1xdXl9WZ2hpamtsbW5vY3R1dnd4eXp7fH1+f3OEhYaHiImKi4yNjo+Ck5SVlpeYmZ&#xA;qbnJ2en5KjpKWmp6ipqqusra6voRAAICAQIDBQUEBQYECAMDbQEAAhEDBCESMUEFURNhIgZxgZEy&#xA;obHwFMHR4SNCFVJicvEzJDRDghaSUyWiY7LCB3PSNeJEgxdUkwgJChgZJjZFGidkdFU38qOzwygp&#xA;0+PzhJSktMTU5PRldYWVpbXF1eX1RlZmdoaWprbG1ub2R1dnd4eXp7fH1+f3OEhYaHiImKi4yNjo&#xA;+DlJWWl5iZmpucnZ6fkqOkpaanqKmqq6ytrq+v/aAAwDAQACEQMRAD8A9U4q7FXYq7FXYq7FXYq7&#xA;FXYq7FXYq7FXYq7FXYq7FXYq7FXYq7FXYq7FXYq7FXYq7FXYq7FXYq7FXYq7FXYq7FWuQxV3IYq7&#xA;kMVdyGKu5DFXchiruQxVuoxV2KuxV2KuxV2KuxV2KuxV2KuxV2KuqMVa5DFXchiruQxV3IYq7kMV&#xA;dyGKu5DFW6jFXYq7FXYqpMxMyLUgVJI23FDsa4qhre5v5FBlsPSJeVSDIjfChPptt/P4dsolkmJA&#xA;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&#xA;7FXYq7FXYq7FXYq7FXYq7FXYq7FXYq//2Q==</xmpGImg:image>
+               </rdf:li>
+            </rdf:Alt>
+         </xmp:Thumbnails>
+         <xmp:MetadataDate>2026-05-04T11:41:16+02:00</xmp:MetadataDate>
+         <xmp:ModifyDate>2026-05-04T11:41:16+02:00</xmp:ModifyDate>
+         <xmpTPg:MaxPageSize rdf:parseType="Resource">
+            <stDim:w>388.055556</stDim:w>
+            <stDim:h>158.307387</stDim:h>
+            <stDim:unit>Millimeters</stDim:unit>
+         </xmpTPg:MaxPageSize>
+         <xmpTPg:NPages>1</xmpTPg:NPages>
+         <xmpTPg:HasVisibleTransparency>True</xmpTPg:HasVisibleTransparency>
+         <xmpTPg:HasVisibleOverprint>False</xmpTPg:HasVisibleOverprint>
+         <xmpTPg:Fonts>
+            <rdf:Bag>
+               <rdf:li rdf:parseType="Resource">
+                  <stFnt:fontName>FiraSans-Regular</stFnt:fontName>
+                  <stFnt:fontFamily>Fira Sans</stFnt:fontFamily>
+                  <stFnt:fontFace>Regular</stFnt:fontFace>
+                  <stFnt:fontType>Open Type</stFnt:fontType>
+                  <stFnt:versionString>Version 3.111;PS 003.111;hotconv 1.0.70;makeotf.lib2.5.58329</stFnt:versionString>
+                  <stFnt:composite>False</stFnt:composite>
+                  <stFnt:fontFileName>.22489.otf</stFnt:fontFileName>
+               </rdf:li>
+               <rdf:li rdf:parseType="Resource">
+                  <stFnt:fontName>Helvetica</stFnt:fontName>
+                  <stFnt:fontFamily>Helvetica</stFnt:fontFamily>
+                  <stFnt:fontFace>Regular</stFnt:fontFace>
+                  <stFnt:fontType>TrueType</stFnt:fontType>
+                  <stFnt:versionString>17.0d1e1</stFnt:versionString>
+                  <stFnt:composite>False</stFnt:composite>
+                  <stFnt:fontFileName>Helvetica.ttc</stFnt:fontFileName>
+               </rdf:li>
+               <rdf:li rdf:parseType="Resource">
+                  <stFnt:fontName>Helvetica-Oblique</stFnt:fontName>
+                  <stFnt:fontFamily>Helvetica</stFnt:fontFamily>
+                  <stFnt:fontFace>Oblique</stFnt:fontFace>
+                  <stFnt:fontType>TrueType</stFnt:fontType>
+                  <stFnt:versionString>17.0d1e1</stFnt:versionString>
+                  <stFnt:composite>False</stFnt:composite>
+                  <stFnt:fontFileName>Helvetica.ttc</stFnt:fontFileName>
+               </rdf:li>
+               <rdf:li rdf:parseType="Resource">
+                  <stFnt:fontName>Helvetica-Bold</stFnt:fontName>
+                  <stFnt:fontFamily>Helvetica</stFnt:fontFamily>
+                  <stFnt:fontFace>Bold</stFnt:fontFace>
+                  <stFnt:fontType>TrueType</stFnt:fontType>
+                  <stFnt:versionString>17.0d1e1</stFnt:versionString>
+                  <stFnt:composite>False</stFnt:composite>
+                  <stFnt:fontFileName>Helvetica.ttc</stFnt:fontFileName>
+               </rdf:li>
+            </rdf:Bag>
+         </xmpTPg:Fonts>
+         <xmpTPg:PlateNames>
+            <rdf:Seq>
+               <rdf:li>Cyan</rdf:li>
+               <rdf:li>Magenta</rdf:li>
+               <rdf:li>Yellow</rdf:li>
+               <rdf:li>Black</rdf:li>
+            </rdf:Seq>
+         </xmpTPg:PlateNames>
+         <xmpTPg:SwatchGroups>
+            <rdf:Seq>
+               <rdf:li rdf:parseType="Resource">
+                  <xmpG:groupName>Groupe de nuances par défaut</xmpG:groupName>
+                  <xmpG:groupType>0</xmpG:groupType>
+               </rdf:li>
+            </rdf:Seq>
+         </xmpTPg:SwatchGroups>
+         <dc:format>image/svg+xml</dc:format>
+         <xmpMM:DerivedFrom rdf:parseType="Resource"/>
+         <xmpMM:DocumentID>xmp.did:2bf3e385-ef5b-42e2-8434-526ce4ba0872</xmpMM:DocumentID>
+         <xmpMM:InstanceID>xmp.iid:2bf3e385-ef5b-42e2-8434-526ce4ba0872</xmpMM:InstanceID>
+         <xmpMM:OriginalDocumentID>xmp.did:2bf3e385-ef5b-42e2-8434-526ce4ba0872</xmpMM:OriginalDocumentID>
+         <xmpMM:History>
+            <rdf:Seq>
+               <rdf:li rdf:parseType="Resource">
+                  <stEvt:action>saved</stEvt:action>
+                  <stEvt:instanceID>xmp.iid:2bf3e385-ef5b-42e2-8434-526ce4ba0872</stEvt:instanceID>
+                  <stEvt:when>2026-05-04T11:41:16+02:00</stEvt:when>
+                  <stEvt:softwareAgent>Adobe Illustrator 30.3 (Macintosh)</stEvt:softwareAgent>
+                  <stEvt:changed>/</stEvt:changed>
+               </rdf:li>
+            </rdf:Seq>
+         </xmpMM:History>
+      </rdf:Description>
+   </rdf:RDF>
+</x:xmpmeta>
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                           
+<?xpacket end="w"?>
+  </metadata>
+</svg>
