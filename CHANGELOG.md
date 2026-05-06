@@ -70,7 +70,7 @@ All notable changes to the Thermal Viewer application will be documented in this
 - **Data Ingestion Extensions**: Added robust functionality to load, clean, and map raw temperature arrays directly from CSV and Excel snapshot files.
 - **Application Distribution**: Overhauled `build_mac.sh` to natively compile and package versioned `.app` datasets into accessible distribution files.
 - **Plugin Architecture Config**: Adjusted PyInstaller `.spec` capabilities to properly encapsulate dynamic, late-loaded application plugins.
-- **Developer Documentation**: Released robust architectural instructions (`PLUGIN.md` and `AGENTS.md`) outlining the EventBus data pipeline to encourage simple LLM-assisted plugin creation.
+- **Developer Documentation**: Released robust architectural instructions (`docs/PLUGIN.md` and related developer guidance) outlining the EventBus data pipeline to encourage simple LLM-assisted plugin creation.
 
 ### Changed
 
