@@ -32,7 +32,7 @@ ThermaliZed includes an event-driven plugin architecture that allows you to:
 - extend the UI with new sidebar controls or visualizations
 - create reusable thermal data pipelines
 
-👉 See [docs/PLUGINS.md](./docs/PLUGIN.md) for a high-level overview
+👉 See [docs/PLUGIN.md](./docs/PLUGIN.md) for a high-level overview
 
 👉 Example reference plugins in [`plugins/`](plugins/):
 
