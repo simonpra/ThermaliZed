@@ -10,9 +10,11 @@ from .scrollbar import Scrollbar
 from .paned_window import PanedWindow
 from .button_icon import ButtonIcon
 from .scrollable_frame import ScrollableFrame
+from .label_frame import LabelFrame
 
 __all__ = [
     'Label',
+
     'Button',
     'Slider',
     'Checkbox',
@@ -23,5 +25,6 @@ __all__ = [
     'Scrollbar',
     'PanedWindow',
     'ButtonIcon',
-    'ScrollableFrame'
+    'ScrollableFrame',
+    'LabelFrame'
 ]
