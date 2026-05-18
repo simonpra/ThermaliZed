@@ -5,6 +5,7 @@ import cv2
 
 # Configuration Colormaps for OpenCV
 COLORMAPS = [
+    (cv2.COLORMAP_BONE, "Bone"),
     (cv2.COLORMAP_INFERNO, "Inferno"),
     (cv2.COLORMAP_JET, "Jet"),
     (cv2.COLORMAP_HOT, "Hot"),
