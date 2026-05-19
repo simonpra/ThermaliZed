@@ -12,6 +12,9 @@ class PluginClass(SystemComponent):
     Auto-discovered and loaded by ``AppContext``.
     """
 
+    # Set to False to prevent this plugin from being loaded by AppContext
+    enabled = False
+
     # ------------------------------------------------------------------
     # Construction
     # ------------------------------------------------------------------
