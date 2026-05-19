@@ -8,7 +8,7 @@
 
 ThermaliZed is a developer-first tool designed for researchers, engineers, and R&D teams working with thermal imaging systems. It enables interactive exploration, manipulation, and extension of 16-bit thermal data pipelines from both live cameras and recorded datasets.
 
-![thermaliZed logo](thermalized.png)
+![thermaliZed logo](thermalized_120.png)
 
 ![Python Version](https://img.shields.io/badge/python-3.11+-blue.svg)
 
