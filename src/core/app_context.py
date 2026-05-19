@@ -132,6 +132,11 @@ class AppContext:
                     module = importlib.import_module(full_module_name)
                     # We expect a PluginClass inside the __init__.py of the module folder
                     if hasattr(module, 'PluginClass'):
+                        # Allow plugins to be disabled with a class attribute
+                        if not getattr(module.PluginClass, 'enabled', True):
+                            print(f"Skipp  Plugin: {module_name}")
+                            continue
+
                         plugin_instance = module.PluginClass()
                         try:
                             plugin_instance.on_load(self)
