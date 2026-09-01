@@ -2,6 +2,17 @@
 
 All notable changes to the Thermal Viewer application will be documented in this file.
 
+## [0.1.2-alpha] - 2026-09-01
+
+### Fixed
+
+- **Thermal Calibration Frames**: Added logic to detect and handle the `0x8000` placeholder emitted by TC001/TS001 sensors during initial calibration, preventing false temperature readings (~238.9 °C) during startup.
+- **Thermal Array Conversion**: Fixed `to_degrees_c` to properly handle NumPy arrays, ensuring sensor frames maintain their spatial structure instead of being coerced to a single float.
+
+### Added
+
+- **Unit Tests**: Introduced `tests/test_functions.py` and `tests/test_processor.py` to validate temperature conversion accuracy and calibration frame detection.
+
 ## [0.1.1-alpha] - 2026-05-06
 
 ### Added
