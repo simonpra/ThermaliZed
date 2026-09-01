@@ -97,6 +97,12 @@ def process_thermal_frame(raw_flat_buffer, width, height, stride, params, event_
         # Interpret the two 8-bit bytes as one 16-bit unsigned integer (little-endian)
         raw_thermal_16bit = thdata.view('<u2').reshape(thermal_h, thermal_w)
 
+        # TC001/TS001 cameras emit an all-0x8000 placeholder while the sensor
+        # performs its initial calibration. Rendering that value would show a
+        # convincing but false 238.9 °C reading for the first few seconds.
+        if np.all(raw_thermal_16bit == 0x8000):
+            return None, {}, {'frame_status': 'calibrating'}
+
         original_raw_16bit = raw_thermal_16bit.copy()
 
         # --- Plugin Pipeline: RAW_FRAME_PIPELINE ---
